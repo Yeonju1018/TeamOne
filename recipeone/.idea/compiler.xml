@@ -7,12 +7,16 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="recipeone" />
+        <module name="project" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="recipeone" target="11" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="project" options="-parameters" />
       <module name="recipeone" options="-parameters" />
     </option>
   </component>
