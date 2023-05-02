@@ -7,13 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @RequiredArgsConstructor
-public class MainController {
+public class AdminController {
 
-    @PreAuthorize("hasRole('USE')")
-    @GetMapping(value = "/")
-    public String main(){
-        return "main";
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping(value = "/admin")
+    public void adminGet(){
+
     }
-
-
 }
