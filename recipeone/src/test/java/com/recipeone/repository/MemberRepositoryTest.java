@@ -11,37 +11,33 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @Log4j2
-class MemberRepostiryTest {
+class MemberRepositoryTest {
 
     @Autowired
-    private MemberRepostiry memberRepostiry;
+    private MemberRepository memberRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Test
     public void insertMembers(){
-        IntStream.rangeClosed(1,100).forEach(i -> {
+        IntStream.rangeClosed(1,10).forEach(i -> {
             Member member = Member.builder()
                     .user_id("member"+i)
                     .user_password(passwordEncoder.encode("1111"))
                     .build();
             member.addRole(MemberRole.USER);
 
-            if (i>=90){
+            if (i>=5){
                 member.addRole(MemberRole.ADMIN);
             }
-            memberRepostiry.save(member);
-        });
-    }
+            memberRepository.save(member);
 
-    @Test
-    public void testRead() {
-        Optional<Member> result = memberRepostiry.getWithRoles("member100");
+
+        });
+        Optional<Member> result = memberRepository.getWithRoles("member5");
 
         Member member = result.orElseThrow();
 
@@ -50,4 +46,6 @@ class MemberRepostiryTest {
 
         member.getRoleSet().forEach(memberRole -> log.info(memberRole.name()));
     }
+
+
 }
