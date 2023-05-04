@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<div layout:fragment="content">
+	<div class="container">
+	<form action="postTest" method="post">
+		<p class="h1">레시피 등록</p><br />
+		<!-- <input type="hidden" th:field="*{id}"> -->
+		<div id="rc_thumbnail" class="rc_thumbnail">
+	        <input type="hidden" name="main_photo" id="main_photo" value="">
+	        <input type="hidden" name="new_main_photo" id="new_main_photo" value="">
+			<input type="hidden" name="del_main_photo" id="del_main_photo" value="">
+	        <div style="position:absolute;left:-3000px"><input type="file" name="q_main_file" id="q_main_file" file_gubun="main" accept="jpeg,png,gif" style="display:;width:0px;height:0px;font-size:0px;" text=""></div>
+	        <div id="divMainPhotoBox" is_over="0">
+	            <img id="mainPhotoHolder" onclick="browseMainFile()" src="https://recipe1.ezmember.co.kr/img/pic_none4.gif" style="width: 250px; height: 250px; cursor:pointer">
+	        </div>
+      	</div>
+		<div class="input-group">
+			<p class="h3 subheading" id="title">레시피 제목&nbsp;&nbsp;&nbsp;</p><br />
+			<input type="text" name="rc_title" placeholder="예) 미역국 끓이기" style="width:610px;"><br />
+		</div>
+		<div class="input-group" id="smarteditor">
+			<p class="h3 subheading">요리순서</p><br />
+			<textarea name="smartEditor" id="smartEditor" 
+					  rows="10" cols="10"
+					  placeholder="내용을 입력해주세요"
+					  style="width: 610px"></textarea>
+		</div>
+
+		<div class="input-group">
+			<p class="h3 subheading">카테고리</p>
+			<select name="rc_ctype" id="rc_ctype" text="종류별">
+				<option value="" >종류별</option>
+				<option value="56">메인반찬</option>
+				<option value="54">국/탕</option>
+				<option value="55">찌개</option>
+				<option value="60">디저트</option>
+				<option value="53">면/만두</option>
+				<option value="52">밥/죽/떡</option>
+				<option value="61">퓨전</option>
+				<option value="57">김치/젓갈/장류</option>
+				<option value="58">양념/소스/잼</option>
+				<option value="65">양식</option>
+				<option value="64">샐러드</option>
+				<option value="68">스프</option>
+				<option value="66">빵</option>
+				<option value="69">과자</option>
+				<option value="59">차/음료/술</option>
+				<option value="62">기타</option>
+				<option value="63">밑반찬</option>
+			</select>
+	        <select name="rc_csituation" id="rc_csituation" text="상황별">
+				<option value="" >상황별</option><option value="12">일상</option>
+				<option value="18">초스피드</option>
+				<option value="13">손님접대</option>
+				<option value="19">술안주</option>
+				<option value="21">다이어트</option>
+				<option value="15">도시락</option>
+				<option value="43">영양식</option>
+				<option value="17">간식</option>
+				<option value="45">야식</option>
+				<option value="20">푸드스타일링</option>
+				<option value="46">해장</option>
+				<option value="44">명절</option>
+				<option value="14">이유식</option>
+				<option value="22">기타</option>
+			</select>
+        	<select name="rc_cmeans" id="rc_cmeans" text="방법별">
+				<option value="" >방법별</option><option value="6">볶음</option>
+				<option value="1">끓이기</option>
+				<option value="7">부침</option>
+				<option value="36">조림</option>
+				<option value="41">무침</option>
+				<option value="42">비빔</option>
+				<option value="8">찜</option>
+				<option value="10">절임</option>
+				<option value="9">튀김</option>
+				<option value="38">삶기</option>
+				<option value="67">굽기</option>
+				<option value="39">데치기</option>
+				<option value="37">회</option>
+				<option value="11">기타</option>
+			</select>
+        	<select name="rc_cingredient" id="rc_cingredient"  text="재료별">
+				<option value="" >재료별</option><option value="70">소고기</option>
+				<option value="71">돼지고기</option>
+				<option value="72">닭고기</option>
+				<option value="23">육류</option>
+				<option value="28">채소류</option>
+				<option value="24">해물류</option>
+				<option value="50">달걀/유제품</option>
+				<option value="33">가공식품류</option>
+				<option value="47">쌀</option>
+				<option value="32">밀가루</option>
+				<option value="25">건어물류</option>
+				<option value="31">버섯류</option>
+				<option value="48">과일류</option>
+				<option value="27">콩/견과류</option>
+				<option value="26">곡류</option>
+				<option value="34">기타</option>
+			</select>
+		</div><!-- 카테고리 END  -->
+		<span class="guide" style="margin:-22px 0 0 146px;">분류를 바르게 설정해주시면, 이용자들이 쉽게 레시피를 검색할 수 있어요.</span>
+		<div class="input-group">
+			<p class="h3 subheading">요리정보</p>
+      		인원
+        	<select name="rc_nop" id="rc_nop"  text="인원">
+				<option value="" >인원</option><option value="1">1인분</option>
+				<option value="2">2인분</option>
+				<option value="3">3인분</option>
+				<option value="4">4인분</option>
+				<option value="5">5인분</option>
+				<option value="6">6인분이상</option>
+			</select>
+      		<span class="pad">시간 </span>
+        	<select name="rc_cooktime" id="rc_cooktime"  text="요리시간">
+				<option value="" >시간</option><option value="5">5분이내</option>
+				<option value="10">10분이내</option>
+				<option value="15">15분이내</option>
+				<option value="20">20분이내</option>
+				<option value="30">30분이내</option>
+				<option value="60">60분이내</option>
+				<option value="90">90분이내</option>
+				<option value="120">2시간이내</option>
+				<option value="999">2시간이상</option>
+			</select>
+        </div> <!-- 요리정보 END -->
+	</div> <!-- container END -->
+	<div class="cont_box pad_l_60">
+        <span class="guide mag_b_15" style="width:100%;">재료가 남거나 부족하지 않도록 정확한 계량정보를 적어주세요.</span>
+		<div class="mag_b_25" id="divMaterialGroupArea"></div>
+
+        <div class="noti">※ 양념, 양념장, 소스, 드레싱, 토핑, 시럽, 육수 밑간 등으로 구분해서 작성해주세요.
+            <div class="noti_btn">
+            	<button type="button" onclick="addMaterialGroup('',[],null,'1')" class="btn-lg btn-default">
+            	<span class="glyphicon glyphicon-plus"></span> 
+            	재료/양념 묶음 추가</button>
+			</div>
+        </div>
+    </div>
+    <div class="regi_btm">
+	    <button id="savebutton" type="button" onclick="doSubmit('save')" class="btn-lg btn-primary">저장</button>
+		<button type="button" onclick="history.back();" class="btn-lg btn-default">취소</button>
+	</div>
+	</form>
+</div> <!-- content END -->
+
+<!-- 스마트 에디터 자바스크립트 추가 / 위치가 TextArea 보다 위에 있을 경우 충돌 가능성이 있음. -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+		let oEditors = []
+	
+	    smartEditor = function() {
+	      console.log("Naver SmartEditor")
+	      nhn.husky.EZCreator.createInIFrame({
+	        oAppRef: oEditors, // 전역변수 명과 동일해야 함. 
+	        elPlaceHolder: "smartEditor", // 에디터가 그려질 textarea ID 값과 동일 해야 함. 
+	        sSkinURI: "/smarteditor/SmartEditor2Skin.html",  // Editor HTML 
+	        fCreator: "createSEditor2", // SE2BasicCreator.js 메소드명이니 변경 금지 X 
+	        htParams : { 
+		    	// 툴바 사용 여부 (true:사용/ false:사용하지 않음) 
+		        bUseToolbar : true, 
+				// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음) 
+				bUseVerticalResizer : false, 
+				// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음) 
+				bUseModeChanger : false 
+		    }
+	      });
+	      
+	   	  // 전송버튼 클릭이벤트 
+	      $(function() {
+	  		$("#savebutton").click(function() {
+	  			oEditors.getById["smartEditor"].exec("UPDATE_CONTENTS_FIELD", []); 
+	  			//textarea의 id를 적어줍니다.
+
+	  			var selcatd = $("#selcatd > option:selected").val();
+	  			var title = $("#title").val();
+	  			var content = document.getElementById("smartEditor").value;;
+
+	  			if (selcatd == "") {
+	  				alert("카테고리를 선택해주세요.");
+	  				return;
+	  			}
+	  			if (title == null || title == "") {
+	  				alert("제목을 입력해주세요.");
+	  				$("#title").focus();
+	  				return;
+	  			}
+	  			if(content == "" || content == null || content == '&nbsp;' || 
+	  					content == '<br>' || content == '<br/>' || content == '<p>&nbsp;</p>'){
+	  				alert("본문을 작성해주세요.");
+	  				oEditors.getById["smartEditor"].exec("FOCUS"); //포커싱
+	  				return;
+	  			} //이 부분은 스마트에디터 유효성 검사 부분이니 참고하시길 바랍니다.
+	  			
+	  			var result = confirm("발행 하시겠습니까?");
+	  			
+	  			if(result){
+	  				alert("발행 완료!");
+	  				$("#noticeWriteForm").submit();
+	  			}else{
+	  				return;
+	  			}
+	  		});
+	  	})
+	    }
+		
+/* 		function save(){
+			oEditors.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);  
+		    		//스마트 에디터 값을 텍스트컨텐츠로 전달
+			var content = document.getElementById("smartEditor").value;
+			alert(document.getElementById("smarteditor").value); 
+		    		// 값을 불러올 땐 document.get으로 받아오기
+			return; 
+		}  */
+	
+	    $(document).ready(function() {
+	      smartEditor()
+	    });
+    </script>
+</th:block>
+
+
+</html>
