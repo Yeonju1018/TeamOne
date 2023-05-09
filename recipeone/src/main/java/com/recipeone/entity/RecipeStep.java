@@ -1,7 +1,5 @@
 package com.recipeone.entity;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -15,12 +13,14 @@ import lombok.ToString;
 @Getter @Setter @ToString
 @Entity
 @Table(name = "recipeStep")
-public class RecipeStep implements Serializable {
+public class RecipeStep extends BaseTime {
 	
 	@Id
-	@ManyToOne
+	private Long user_id;
+	
+	@ManyToOne(targetEntity = Recipe.class)
 	@JoinColumn(name = "rc_num")
-	private Integer stepNum;
-	private String stepText;
-	private String stepImg;
+	private Recipe recipe; // 레시피 번호
+	private String stepText; // 레시피 설명 (조리 설명)
+	private String stepImg; // 레시피 이미지 (조리 이미지)
 }

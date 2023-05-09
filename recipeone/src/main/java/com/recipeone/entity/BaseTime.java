@@ -2,6 +2,7 @@ package com.recipeone.entity;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 
@@ -17,6 +18,7 @@ import lombok.Getter;
 public class BaseTime {
 	
 	@CreatedDate
+	@Column(updatable = false)
 	private LocalDateTime createdAt;
 	
 	@LastModifiedDate
