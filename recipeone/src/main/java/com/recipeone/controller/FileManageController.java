@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.JsonObject;
 
-@Controller
+//@Controller
 public class FileManageController {
 
 	@RequestMapping(value="/admin/item/uploadSummernoteImageFile", produces = "application/json; charset=utf8")

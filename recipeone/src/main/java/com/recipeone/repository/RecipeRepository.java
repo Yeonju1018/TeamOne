@@ -13,5 +13,7 @@ import com.recipeone.entity.Recipe;
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, String> {
 
-		
+	Optional<Recipe> findById(Long recipeId);
+
+	
 }

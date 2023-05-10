@@ -1,6 +1,5 @@
 package com.recipeone.entity;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,11 +20,11 @@ import lombok.ToString;
 @Getter @Setter @ToString
 @Entity
 @Table(name = "recipe")
-public class Recipe extends BaseTime {
+public class Recipe extends BaseTimeEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long user_id; // 레시피 입력 아이디
+	private Long id; // 레시피 아이디
 	
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer rc_num; // 레시피 게시글 번호

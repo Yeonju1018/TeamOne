@@ -1,15 +1,21 @@
 package com.recipeone.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
+
+import org.modelmapper.ModelMapper;
+
+import com.recipeone.entity.Recipe;
 
 import lombok.Getter;
 import lombok.Setter;
 
-// 나중에 
 @Getter @Setter
 public class RecipeFormDto {
 	
-	private Long id; // 레시피 입력 아이디
+	private Long id; // 레시피 아이디
 	
 	private Integer rc_num; // 레시피 게시글 번호
 	
@@ -30,4 +36,18 @@ public class RecipeFormDto {
 	private String rc_cingredient; // 카테고리 재료별
 	private String rc_cmeans; // 카테고리 방법별
 	private String rc_ctheme; // 카테고리 테마별
+	
+	private List<RecipeImgDto> recipeImgDtoList = new ArrayList<RecipeImgDto>();
+	
+	private List<Long> itemImgIds = new ArrayList<Long>();
+	
+	private static ModelMapper modelMapper = new ModelMapper();
+	
+	public Recipe createRecipe() {
+		return modelMapper.map(this, Recipe.class);
+	}
+	
+	public static RecipeFormDto of(Recipe recipe) {
+		return modelMapper.map(recipe, RecipeFormDto.class);
+	}
 }

@@ -2,34 +2,28 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
+
 <div layout:fragment="content">
 	<div class="container">
-	<form action="postTest" method="post" enctype="multipart/form-data" >
 		<p class="h1">레시피 등록</p><br />
+		<!-- <input type="hidden" th:field="*{id}"> -->
 		<div id="rc_thumbnail" class="rc_thumbnail">
 	        <input type="hidden" name="main_photo" id="main_photo" value="">
 	        <input type="hidden" name="new_main_photo" id="new_main_photo" value="">
 			<input type="hidden" name="del_main_photo" id="del_main_photo" value="">
 	        <div style="position:absolute;left:-3000px"><input type="file" name="q_main_file" id="q_main_file" file_gubun="main" accept="jpeg,png,gif" style="display:;width:0px;height:0px;font-size:0px;" text=""></div>
 	        <div id="divMainPhotoBox" is_over="0">
-	            <input type="file" id="mainPhotoHolder" accept="image/*" onchange="setThumbnail(event);" />
-	            <div id="image_container"></div>
-	        	
+	            <img id="mainPhotoHolder" onclick="browseMainFile()" src="https://recipe1.ezmember.co.kr/img/pic_none4.gif" style="width: 250px; height: 250px; cursor:pointer">
 	        </div>
       	</div>
 		<div class="input-group">
-			<p class="h3 subheading" id="title">레시피 제목&nbsp;&nbsp;&nbsp;</p><br />
+			<p class="h3 subheading">레시피 제목&nbsp;&nbsp;&nbsp;</p>
 			<input type="text" name="rc_title" placeholder="예) 미역국 끓이기" style="width:610px;"><br />
 		</div>
 		<div class="input-group">
-			<p class="h3 subheading">요리순서</p><br />
-<!-- 			<textarea name="smartEditor" id="summernote" 
-					  rows="10" cols="10"
-					  placeholder="내용을 입력해주세요"
-					  style="width: 610px"></textarea> -->
-				<textarea class="summernote" id="summernote"></textarea>  
+			<p class="h3 subheading">요리 소개&nbsp;&nbsp;&nbsp;</p>
+			<textarea name="cok_intro" id="cok_intro" class="form-control step_cont" placeholder="이 레시피의 탄생배경을 적어주세요." style="height:100px; width:610px; resize:none;"></textarea><br />
 		</div>
-
 		<div class="input-group">
 			<p class="h3 subheading">카테고리</p>
 			<select name="rc_ctype" id="rc_ctype" text="종류별">
@@ -103,7 +97,7 @@
 				<option value="34">기타</option>
 			</select>
 		</div><!-- 카테고리 END  -->
-		<!-- <span class="guide" style="margin:-22px 0 0 146px;">분류를 바르게 설정해주시면, 이용자들이 쉽게 레시피를 검색할 수 있어요.</span> -->
+		<span class="guide" style="margin:-22px 0 0 146px;">분류를 바르게 설정해주시면, 이용자들이 쉽게 레시피를 검색할 수 있어요.</span>
 		<div class="input-group">
 			<p class="h3 subheading">요리정보</p>
       		인원
@@ -129,7 +123,7 @@
 			</select>
         </div> <!-- 요리정보 END -->
 	</div> <!-- container END -->
-<!-- 	<div class="cont_box pad_l_60">
+	<div class="cont_box pad_l_60">
         <span class="guide mag_b_15" style="width:100%;">재료가 남거나 부족하지 않도록 정확한 계량정보를 적어주세요.</span>
 		<div class="mag_b_25" id="divMaterialGroupArea"></div>
 
@@ -140,91 +134,10 @@
             	재료/양념 묶음 추가</button>
 			</div>
         </div>
-    </div> -->
+    </div>
     <div class="regi_btm">
-	    <button th:formaction="@{/admin/item/new}" id="savebutton" type="submit" class="btn-lg btn-primary">저장</button>
+	    <button type="button" onclick="doSubmit('save')" class="btn-lg btn-primary">저장</button>
 		<button type="button" onclick="history.back();" class="btn-lg btn-default">취소</button>
 	</div>
-	</form>
 </div> <!-- content END -->
-
-<!-- 썸네일, summernote 자바스크립트 추가 / 위치가 TextArea 보다 위에 있을 경우 충돌 가능성이 있음. -->
-<th:block layout:fragment="script">
-    <script th:inline="javascript">
-   
-    $(document).ready(function() {
-
-    	var toolbar = [
-    		    // 글꼴 설정
-    		    ['fontname', ['fontname']],
-    		    // 글자 크기 설정
-    		    ['fontsize', ['fontsize']],
-    		    // 굵기, 기울임꼴, 밑줄,취소 선, 서식지우기
-    		    ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
-    		    // 글자색
-    		    ['color', ['forecolor','color']],
-    		    // 표만들기
-    		    ['table', ['table']],
-    		    // 글머리 기호, 번호매기기, 문단정렬
-    		    ['para', ['ul', 'ol', 'paragraph']],
-    		    // 줄간격
-    		    ['height', ['height']],
-    		    // 그림첨부, 링크만들기, 동영상첨부
-    		    ['insert',['picture','link','video']],
-    		    // 코드보기, 확대해서보기, 도움말
-    		    ['view', ['codeview','fullscreen', 'help']]
-    		  ];
-
-    	var setting = {
-                height : 300,
-                minHeight : null,
-                maxHeight : null,
-                focus : true,
-                lang : 'ko-KR',
-                toolbar : toolbar,
-                callbacks : { //여기 부분이 이미지를 첨부하는 부분
-                onImageUpload : function(files, editor,
-                welEditable) {
-                for (var i = files.length - 1; i >= 0; i--) {
-                uploadSummernoteImageFile(files[i],
-                this);
-                		}
-                	}
-                }
-             };
-
-            $('#summernote').summernote(setting);
-            });
-    		
-		    function uploadSummernoteImageFile(file, el) {
-				data = new FormData();
-				data.append("file", file);
-				$.ajax({
-					data : data,
-					type : "POST",
-					url : "uploadSummernoteImageFile",
-					contentType : false,
-					enctype : 'multipart/form-data',
-					processData : false,
-					success : function(data) {
-						$(el).summernote('editor.insertImage', data.url);
-					}
-				});
-			}
-		function setThumbnail(event) {
-			var reader = new FileReader();
-			
-			reader.onload = function(event) {
-				var img = document.createElement("img");
-				img.setAttribute("src", event.target.result);
-				document.querySelector("div#image_container").appendChild(img);
-			};
-			
-			reader.readAsDataURL(event.target.files[0]);
-		}
-
-    </script>
-</th:block>
-
-
 </html>

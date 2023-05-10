@@ -13,10 +13,10 @@ import lombok.ToString;
 @Getter @Setter @ToString
 @Entity
 @Table(name = "recipeStep")
-public class RecipeStep extends BaseTime {
+public class RecipeStep extends BaseTimeEntity {
 	
 	@Id
-	private Long user_id;
+	private Long id;
 	
 	@ManyToOne(targetEntity = Recipe.class)
 	@JoinColumn(name = "rc_num")
