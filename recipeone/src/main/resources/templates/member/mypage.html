@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      xml:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       layout:decorate="~{layouts/layout1}">
 
 <!-- 사용자 CSS 추가 -->
@@ -33,19 +33,6 @@
     </style>
 </th:block>
 
-<script layout:fragment="script" th:inline="javascript">
-  const auth = [[${#authentication.principal}]]
-  //auth는 현재 인증된 사용자 정보이다
-  const errors = [[${#errors}]]
-  console.log(errors)
-</script>
-
-<div layout:fragment="content">
-
-작성자와 로그인한 사람이 같아야만 modify 버튼이 보임
-
-  <div th:with="user=${#authentication.principal}">
-    <a th:if="${user != null && user.username == dto.writer}" th:href="">modify</a>
-
-  </div>
+<div>
+    마이페이지
 </div>
