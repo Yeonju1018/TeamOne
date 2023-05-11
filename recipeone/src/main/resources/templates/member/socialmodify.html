@@ -40,16 +40,26 @@
 if
     (error && error === 'confirmedPassword'){
         alert("비밀번호 확인이 일치하지 않습니다.")}
+       else if
+    (error && error === 'usernickname'){
+        alert("중복된 닉네임이 있습니다.")}
 </script>
 <div layout:fragment="content">
     <div>
-        <form action="/member/modify" method="post" id="registerForm">
+        <form action="/member/socialmodify" method="post" id="registerForm">
             <div class="input-group">
             <span>아이디</span>
                 <input type="text" name="mid" class="form-control"  th:value="${#authentication.principal.username}" readonly>
             </div>
+<!--            <div class="input-group">-->
+<!--                <input type="text" name="oldusernickname" class="form-control"  th:value="${#authentication.principal.usernickname}" readonly hidden="hidden">-->
+<!--            </div>-->
             <div class="input-group">
-                <span>패스워드</span>
+            <span>닉네임 설정</span>
+                <input type="text" name="usernickname" class="form-control"  th:value="${#authentication.principal.username}" >
+            </div>
+            <div class="input-group">
+                <span>패스워드 설정</span>
                 <input type="password" name="password" class="form-control">
             </div>
             <div class="input-group">
