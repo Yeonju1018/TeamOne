@@ -24,14 +24,6 @@ public class RecipeController {
 	
 	private final RecipeService recipeService;
 	
-	/*
-	 * @GetMapping(value = "/admin/item/new") public ModelAndView
-	 * insertEditor(HttpServletRequest req, ModelMap model) throws Exception {
-	 * ModelAndView mav = new ModelAndView("recipe/recipeForm");
-	 * 
-	 * return mav; }
-	 */
-	
 	@GetMapping(value = "/admin/item/new")
 	public String recipeForm(Model model) {
 		model.addAttribute("recipeFormDto", new RecipeFormDto());
@@ -52,13 +44,11 @@ public class RecipeController {
 		}
 		
 		try {
-			recipeService.saveRecipe(recipeFormDto, recipeImgFileList);
+			recipeService.saveRecipe(recipeFormDto,  recipeImgFileList);
 		} catch (Exception e) {
 			model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
 			return "recipe/recipeForm";
 		}
-		
 		return "redirect:/";
 	}	
-
 }

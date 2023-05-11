@@ -32,7 +32,7 @@ public class RecipeImg extends BaseEntity {
 	private String repimgYn; // 대표 이미지 여부
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "rc_num")
+	@JoinColumn(name = "num")
 	private Recipe recipe;
 	
 	public void updateRecipeImg(String oriImgName, String imgName, String imgUrl) {

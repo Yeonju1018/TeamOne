@@ -19,9 +19,9 @@ public class RecipeRepositoryTest {
 	@DisplayName("레시피 저장 테스트")
 	public void createRecipeTest() {
 		Recipe recipe = new Recipe();
-		recipe.setRc_title("테스트 레시피");
-		recipe.setRc_cooktime("10분");
-		recipe.setRc_nop("1인분");
+		recipe.setTitle("테스트 레시피");
+		recipe.setCooktime("10분");
+		recipe.setNop("1인분");
 		Recipe savedRecipe = recipeRepository.save(recipe);
 		System.out.println(savedRecipe.toString());
 	}

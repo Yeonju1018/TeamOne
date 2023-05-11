@@ -6,50 +6,45 @@
 	<div class="container">
 	<form role="form" method="post" enctype="multipart/form-data" th:object="${recipeFormDto}">
 		<p class="h1">레시피 등록</p><br />
+		
+		<p class="h3 subheading">썸네일 사진선택</p>
 		<div id="rc_thumbnail" class="rc_thumbnail">
-		<p class="h3 subheading">썸네일 사진선택</p><br />
 	        <div id="divMainPhotoBox" is_over="0">
-	            <input type="file" id="mainPhotoHolder" name="thumbnailImgFile" onchange="setThumbnail(event);" />
-	            <div id="image_container"></div>
+	            <input type="file" id="mainPhotoHolder" name="recipeImgFile" onchange="setThumbnail(event);" /><br />
+	            <div id="image_container"></div><br />
 	        </div>
-	        
       	</div>
+      	
+      	<p class="h3 subheading" id="title">레시피 제목&nbsp;&nbsp;&nbsp;</p>
 		<div class="input-group">
-			<p class="h3 subheading" id="title">레시피 제목&nbsp;&nbsp;&nbsp;</p><br />
-			<input type="text" name="rc_title" placeholder="예) 미역국 끓이기" style="width:610px;"><br />
+			<input type="text" name="title" placeholder="예) 미역국 끓이기" style="width:610px;"><br />
 		</div>
+		
+		<p class="h3 subheading">요리순서</p>
 		<div class="input-group">
-			<p class="h3 subheading">요리순서</p><br />
-<!-- 			<textarea name="smartEditor" id="summernote" 
-					  rows="10" cols="10"
-					  placeholder="내용을 입력해주세요"
-					  style="width: 610px"></textarea> -->
-				<!-- <textarea class="summernote" id="summernote"></textarea> -->
-		</div>
-		<div th:if="${#lists.isEmpty(recipeFormDto.recipeImgDtoList)}">
-	      <div class="form-group" th:each="num: ${#numbers.sequence(1,3)}" >
-	        <div class="custom-file img-div">
-	          <input type="file" class="custom-file-input" name="recipeImgFile">
-	          <label class="custom-file-label" th:text="요리이미지 + ${num}"></label>
-	          <textarea class="input-group-text" id="textbox" placeholder="내용을 입력해주세요" style="width: 610px"></textarea>
-	          
+			<div th:if="${#lists.isEmpty(recipeFormDto.recipeImgDtoList)}">
+		      <div class="form-group" th:each="num: ${#numbers.sequence(1,3)}" >
+		        <div class="custom-file img-div">
+		          <input type="file" class="custom-file-input" name="recipeImgFile">
+		          <label class="custom-file-label" th:text="요리이미지 + ${num}"></label>
+		          <textarea class="input-group-text" name="stepText" id="textbox" placeholder="내용을 입력해주세요" style="width: 610px"></textarea><br />
+		        </div>
+		      </div>
+		    </div>
+		    <div th:if = "${not #lists.isEmpty(recipeFormDto.recipeImgDtoList)}">
+	      	  <div class="form-group" th:each="recipeImgDto, status: ${recipeFormDto.recipeImgDtoList}">
+	            <div class="custom-file img-div">
+	            <input type="file" class="custom-file-input" name="recipeImgFile">
+	            <input type="hidden" name="recipeImgIds" th:value="${recipeImgDto.id}">
+	            <label class="custom-file-label" th:text="${not #strings.isEmpty(recipeImgDto.oriImgName)} ? ${recipeImgDto.oriImgName} : '요리이미지' + ${status.index+1}"></label>
+	            </div>
+	          </div>
 	        </div>
-	      </div>
-	    </div>
-	
-	    <div th:if = "${not #lists.isEmpty(recipeFormDto.recipeImgDtoList)}">
-	      <div class="form-group" th:each="recipeImgDto, status: ${recipeFormDto.recipeImgDtoList}">
-	        <div class="custom-file img-div">
-	          <input type="file" class="custom-file-input" name="recipeImgFile">
-	          <input type="hidden" name="recipeImgIds" th:value="${recipeImgDto.id}">
-	          <label class="custom-file-label" th:text="${not #strings.isEmpty(recipeImgDto.oriImgName)} ? ${recipeImgDto.oriImgName} : '요리이미지' + ${status.index+1}"></label>
-	        </div>
-	      </div>
-	    </div>
-
+		</div> <!-- 요리순서 END -->
+		
+		<p class="h3 subheading">카테고리</p>
 		<div class="input-group">
-			<p class="h3 subheading">카테고리</p>
-			<select name="rc_ctype" id="rc_ctype" text="종류별">
+			<select name="rcType" id="rcType" text="종류별">
 				<option value="" >종류별</option>
 				<option value="56">메인반찬</option>
 				<option value="54">국/탕</option>
@@ -69,7 +64,7 @@
 				<option value="62">기타</option>
 				<option value="63">밑반찬</option>
 			</select>
-	        <select name="rc_csituation" id="rc_csituation" text="상황별">
+	        <select name="rcSituation" id="rcSituation" text="상황별">
 				<option value="" >상황별</option><option value="12">일상</option>
 				<option value="18">초스피드</option>
 				<option value="13">손님접대</option>
@@ -85,7 +80,7 @@
 				<option value="14">이유식</option>
 				<option value="22">기타</option>
 			</select>
-        	<select name="rc_cmeans" id="rc_cmeans" text="방법별">
+        	<select name="rcMeans" id="rcMeans" text="방법별">
 				<option value="" >방법별</option><option value="6">볶음</option>
 				<option value="1">끓이기</option>
 				<option value="7">부침</option>
@@ -101,7 +96,7 @@
 				<option value="37">회</option>
 				<option value="11">기타</option>
 			</select>
-        	<select name="rc_cingredient" id="rc_cingredient"  text="재료별">
+        	<select name="rcIngredient" id="rcIngredient"  text="재료별">
 				<option value="" >재료별</option><option value="70">소고기</option>
 				<option value="71">돼지고기</option>
 				<option value="72">닭고기</option>
@@ -119,22 +114,24 @@
 				<option value="26">곡류</option>
 				<option value="34">기타</option>
 			</select>
-		</div><!-- 카테고리 END  -->
-		<!-- <span class="guide" style="margin:-22px 0 0 146px;">분류를 바르게 설정해주시면, 이용자들이 쉽게 레시피를 검색할 수 있어요.</span> -->
+		</div><br /><!-- 카테고리 END  -->
+		
+		<p class="h3 subheading">요리정보</p>
 		<div class="input-group">
-			<p class="h3 subheading">요리정보</p>
-      		인원
-        	<select name="rc_nop" id="rc_nop"  text="인원">
-				<option value="" >인원</option><option value="1">1인분</option>
+      		<span>인원 </span>
+        	<select name="nop" id="nop"  text="인원">
+				<option value="" >인원선택</option>
+				<option value="1">1인분</option>
 				<option value="2">2인분</option>
 				<option value="3">3인분</option>
 				<option value="4">4인분</option>
 				<option value="5">5인분</option>
 				<option value="6">6인분이상</option>
 			</select>
-      		<span class="pad">시간 </span>
-        	<select name="rc_cooktime" id="rc_cooktime"  text="요리시간">
-				<option value="" >시간</option><option value="5">5분이내</option>
+      		<span>시간 </span>
+        	<select name="cooktime" id="cooktime"  text="요리시간">
+				<option value="" >시간선택</option>
+				<option value="5">5분이내</option>
 				<option value="10">10분이내</option>
 				<option value="15">15분이내</option>
 				<option value="20">20분이내</option>
@@ -144,31 +141,28 @@
 				<option value="120">2시간이내</option>
 				<option value="999">2시간이상</option>
 			</select>
-        </div> <!-- 요리정보 END -->
+        </div><br /> <!-- 요리정보 END -->
+        
+        <p class="h3 subheading">재료</p>
+		<div id="divMaterialGroupArea">
+		 	<input type="text" name="gubun" placeholder="재료/양념 구분">
+		    <input type="text" name="igdName" placeholder="재료명">
+		    <input type="text" name="count" placeholder="중량정보"><br />
+		</div>    
+	    <div class="regi_btm" th:if="${#strings.isEmpty(recipeFormDto.id)}">
+		    <button th:formaction="@{/admin/item/new}" id="savebutton" type="submit" class="btn-lg btn-primary">저장</button>
+			<button type="button" onclick="history.back();" class="btn-lg btn-default">취소</button>
+		</div>
+		<div th:unless="${#strings.isEmpty(recipeFormDto.id)}" style="text-align: center">
+	      <button th:formaction="@{'/admin/item/' + ${recipeFormDto.id} }" type="submit" class="btn btn-primary">수정</button>
+	    </div>
 	</div> <!-- container END -->
-<!-- 	<div class="cont_box pad_l_60">
-        <span class="guide mag_b_15" style="width:100%;">재료가 남거나 부족하지 않도록 정확한 계량정보를 적어주세요.</span>
-		<div class="mag_b_25" id="divMaterialGroupArea"></div>
 
-        <div class="noti">※ 양념, 양념장, 소스, 드레싱, 토핑, 시럽, 육수 밑간 등으로 구분해서 작성해주세요.
-            <div class="noti_btn">
-            	<button type="button" onclick="addMaterialGroup('',[],null,'1')" class="btn-lg btn-default">
-            	<span class="glyphicon glyphicon-plus"></span> 
-            	재료/양념 묶음 추가</button>
-			</div>
-        </div>
-    </div> -->
-    <div class="regi_btm" th:if="${#strings.isEmpty(recipeFormDto.id)}">
-	    <button th:formaction="@{/admin/item/new}" id="savebutton" type="submit" class="btn-lg btn-primary">저장</button>
-		<button type="button" onclick="history.back();" class="btn-lg btn-default">취소</button>
-	</div>
-	<div th:unless="${#strings.isEmpty(recipeFormDto.id)}" style="text-align: center">
-      <button th:formaction="@{'/admin/item/' + ${recipeFormDto.id} }" type="submit" class="btn btn-primary">수정</button>
-    </div>
+
 	</form>
 </div> <!-- content END -->
 
-<!-- 썸네일, summernote 자바스크립트 추가 / 위치가 TextArea 보다 위에 있을 경우 충돌 가능성이 있음. -->
+<!-- 썸네일 자바스크립트 추가 -->
 <th:block layout:fragment="script">
     <script th:inline="javascript">
     $(document).ready(function(){
@@ -176,9 +170,7 @@
         if(errorMessage != null){
             alert(errorMessage);
         }
-
         bindDomEvent();
-
     });
 
     function bindDomEvent(){
@@ -191,85 +183,20 @@
                 alert("이미지 파일만 등록이 가능합니다.");
                 return;
             }
-
             $(this).siblings(".custom-file-label").html(fileName);
         });
     }
-   
-    /* $(document).ready(function() {
-
-    	var toolbar = [
-    		    // 글꼴 설정
-    		    ['fontname', ['fontname']],
-    		    // 글자 크기 설정
-    		    ['fontsize', ['fontsize']],
-    		    // 굵기, 기울임꼴, 밑줄,취소 선, 서식지우기
-    		    ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
-    		    // 글자색
-    		    ['color', ['forecolor','color']],
-    		    // 표만들기
-    		    ['table', ['table']],
-    		    // 글머리 기호, 번호매기기, 문단정렬
-    		    ['para', ['ul', 'ol', 'paragraph']],
-    		    // 줄간격
-    		    ['height', ['height']],
-    		    // 그림첨부, 링크만들기, 동영상첨부
-    		    ['insert',['picture','link','video']],
-    		    // 코드보기, 확대해서보기, 도움말
-    		    ['view', ['codeview','fullscreen', 'help']]
-    		  ];
-
-    	var setting = {
-                height : 300,
-                minHeight : null,
-                maxHeight : null,
-                focus : true,
-                lang : 'ko-KR',
-                toolbar : toolbar,
-                callbacks : { //여기 부분이 이미지를 첨부하는 부분
-                onImageUpload : function(files, editor,
-                welEditable) {
-                for (var i = files.length - 1; i >= 0; i--) {
-                uploadSummernoteImageFile(files[i],
-                this);
-                		}
-                	}
-                }
-             };
-
-            $('#summernote').summernote(setting);
-            });
-    		
-		    function uploadSummernoteImageFile(file, el) {
-				data = new FormData();
-				data.append("file", file);
-				$.ajax({
-					data : data,
-					type : "POST",
-					url : "/uploadSummernoteImageFile",
-					contentType : false,
-					enctype : 'multipart/form-data',
-					processData : false,
-					success : function(data) {
-						$(el).summernote('editor.insertImage', data.url);
-					}
-				});
-			} */
-		function setThumbnail(event) {
-			var reader = new FileReader();
+  
+	function setThumbnail(event) {
+		var reader = new FileReader();
 			
-			reader.onload = function(event) {
-				var img = document.createElement("img");
-				img.setAttribute("src", event.target.result);
-				document.querySelector("div#image_container").appendChild(img);
-				
-			};
-			
-			reader.readAsDataURL(event.target.files[0]);
-		}
-
-			
-
+		reader.onload = function(event) {
+			var img = document.createElement("img");
+			img.setAttribute("src", event.target.result);
+			document.querySelector("div#image_container").appendChild(img);	
+		};
+		reader.readAsDataURL(event.target.files[0]);
+	}
     </script>
 </th:block>
 

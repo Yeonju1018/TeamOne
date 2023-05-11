@@ -8,6 +8,8 @@ import javax.validation.constraints.NotBlank;
 import org.modelmapper.ModelMapper;
 
 import com.recipeone.entity.Recipe;
+import com.recipeone.entity.RecipeIngredient;
+import com.recipeone.entity.RecipeStep;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,24 +22,22 @@ public class RecipeFormDto {
 	private Integer rc_num; // 레시피 게시글 번호
 	
 	@NotBlank(message = "제목은 필수!")
-	private String rc_title; // 레시피 제목
+	private String title; // 레시피 제목
 	
-	@NotBlank(message = "내용은 필수!")
-	private String rc_content; // 레시피 내용
-	private String rc_cooktime; // 조리시간
-	private String rc_nop; // @인분
-	private String rc_thumbnail; // 썸네일 이미지
+	private String cooktime; // 조리시간
+	private String nop; // @인분
+	//private String rc_thumbnail; // 썸네일 이미지
 	
-	@NotBlank(message = "재료는 필수!")
-	private String rc_ingredient; // 레시피 재료
-	private String rc_tag; // 태그
-	private String rc_ctype; // 카테고리 종류별
-	private String rc_csituation; // 카테고리 상황별
-	private String rc_cingredient; // 카테고리 재료별
-	private String rc_cmeans; // 카테고리 방법별
-	private String rc_ctheme; // 카테고리 테마별
+	private String tag; // 태그
+	private String rcType; // 카테고리 종류별
+	private String rcSituation; // 카테고리 상황별
+	private String rcIngredient; // 카테고리 재료별
+	private String rcMeans; // 카테고리 방법별
+	private String rcTheme; // 카테고리 테마별
 	
-	private List<RecipeImgDto> recipeImgDtoList = new ArrayList<RecipeImgDto>();
+	private List<RecipeStep> recipeSteps = new ArrayList<>(); // 레시피 내용
+	private List<RecipeIngredient> recipeIngredients = new ArrayList<>(); // 레시피 재료
+	private List<RecipeImgDto> recipeImgDtoList = new ArrayList<>();
 	
 	private List<Long> itemImgIds = new ArrayList<Long>();
 	
@@ -50,4 +50,5 @@ public class RecipeFormDto {
 	public static RecipeFormDto of(Recipe recipe) {
 		return modelMapper.map(recipe, RecipeFormDto.class);
 	}
+
 }

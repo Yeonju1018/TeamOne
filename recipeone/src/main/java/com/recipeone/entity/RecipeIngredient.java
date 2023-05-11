@@ -6,6 +6,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.recipeone.dto.RecipeIngredientDto;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,10 +21,18 @@ public class RecipeIngredient extends BaseTimeEntity {
 	private Long id;
 	
 	@ManyToOne(targetEntity = Recipe.class)
-	@JoinColumn(name = "rc_num")
+	@JoinColumn(name = "num")
 	private Recipe recipe; // 재료번호
 	
-	private String title; // 큰 구분
+	private String gubun; // 큰 구분
 	private String igdName; // 재료이름
 	private String count; // 중량, 수량
+	
+	public void createRecipeIngredient(RecipeIngredientDto recipeIngredientDto) {
+		this.id = recipeIngredientDto.getId();
+		this.recipe = recipeIngredientDto.getRecipe();
+		this.gubun = recipeIngredientDto.getGubun();
+		this.igdName = recipeIngredientDto.getIgdName();
+		this.count = recipeIngredientDto.getCount();
+	}
 }

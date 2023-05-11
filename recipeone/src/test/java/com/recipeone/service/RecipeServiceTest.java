@@ -56,7 +56,7 @@ public class RecipeServiceTest {
 	void saveRecipe() throws Exception {
 		RecipeFormDto recipeFormDto = new RecipeFormDto();
 		recipeFormDto.setRc_title("테스트 레시피 제목");
-		recipeFormDto.setRc_content("테스트 내용");
+		
 		
 		List<MultipartFile> multipartFileList = createMultipartFiles();
 		Long recipeId = recipeService.saveRecipe(recipeFormDto, multipartFileList);
@@ -64,7 +64,7 @@ public class RecipeServiceTest {
 		List<RecipeImg> recipeImgList = recipeImgRepository.findByRecipeIdOrderByIdAsc(recipeId);
 		Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(EntityExistsException::new);
 		
-		assertEquals(recipeFormDto.getRc_title(), recipe.getRc_title());
+		assertEquals(recipeFormDto.getRc_title(), recipe.getRTitle());
 		assertEquals(multipartFileList.get(0).getOriginalFilename(), recipeImgList.get(0).getOriImgName());
 		
 		

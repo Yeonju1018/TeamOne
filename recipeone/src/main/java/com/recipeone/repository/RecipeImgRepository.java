@@ -9,5 +9,6 @@ import com.recipeone.entity.RecipeImg;
 public interface RecipeImgRepository extends JpaRepository<RecipeImg, Long> {
 	
 	List<RecipeImg> findByRecipeIdOrderByIdAsc(Long recipeId);
-
+	
+	RecipeImg findByRecipeIdAndRepimgYn(Long recipeId, String repimgYn);
 }
