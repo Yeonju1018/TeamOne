@@ -30,9 +30,9 @@ public class RecipeImg extends BaseEntity {
 	private String imgUrl; //이미지 조회 경로
 	
 	private String repimgYn; // 대표 이미지 여부
-	
+		
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "num")
+	@JoinColumn(name = "id")
 	private Recipe recipe;
 	
 	public void updateRecipeImg(String oriImgName, String imgName, String imgUrl) {

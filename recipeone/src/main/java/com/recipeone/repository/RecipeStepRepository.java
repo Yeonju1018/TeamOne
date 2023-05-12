@@ -10,5 +10,7 @@ import com.recipeone.entity.RecipeStep;
 @Repository
 public interface RecipeStepRepository extends JpaRepository<RecipeStep, Long> {
 	
-	List<RecipeStep> findByRecipeId(Long id);
+	List<RecipeStep> findByRecipeIdOrderByIdAsc(Long recipeId);
+
+	
 }

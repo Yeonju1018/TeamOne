@@ -30,6 +30,7 @@ public class RecipeImgService {
         String oriImgName = recipeImgFile.getOriginalFilename();
         String imgName = "";
         String imgUrl = "";
+       
 
         //파일 업로드
         if (!StringUtils.isEmpty(oriImgName)){

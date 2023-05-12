@@ -33,15 +33,15 @@ public class Recipe extends BaseTimeEntity {
 	@Column(nullable = false, length = 50)
 	private String title; // 레시피 제목
 	
-	@OneToMany(mappedBy = "recipe", cascade=CascadeType.PERSIST)
-	private List<RecipeStep> recipeSteps = new ArrayList<>(); // 레시피 내용(요리순서)
+	//@OneToMany(mappedBy = "recipe", cascade=CascadeType.PERSIST)
+	//private List<RecipeStep> recipeSteps = new ArrayList<>(); // 레시피 내용(요리순서)
 	
 	private String cooktime; // 조리시간 (요리정보)
 	private String nop; // @인분 (요리정보)
 	//private String rc_thumbnail; // 썸네일 이미지
 	
-	@OneToMany(mappedBy = "recipe", cascade=CascadeType.PERSIST)
-	private List<RecipeIngredient> recipeIngredients = new ArrayList<>(); // 레시피 재료
+	//@OneToMany(mappedBy = "recipe", cascade=CascadeType.PERSIST)
+	//private List<RecipeIngredient> recipeIngredients = new ArrayList<>(); // 레시피 재료
 	private String tag; // 태그
 	private String rcType; // 카테고리 종류별
 	private String rcSituation; // 카테고리 상황별
@@ -60,8 +60,8 @@ public class Recipe extends BaseTimeEntity {
 		this.rcSituation = recipeFormDto.getRcSituation(); 
 		this.rcIngredient = recipeFormDto.getRcIngredient(); 
 		this.rcMeans = recipeFormDto.getRcMeans(); 
-		this.recipeSteps = recipeFormDto.getRecipeSteps(); 
-		this.recipeIngredients = recipeFormDto.getRecipeIngredients();
+		//this.recipeSteps = recipeFormDto.getRecipeSteps(); 
+		//this.recipeIngredients = recipeFormDto.getRecipeIngredients();
 	 }
 
 }

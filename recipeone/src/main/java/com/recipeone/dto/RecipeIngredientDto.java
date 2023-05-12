@@ -12,7 +12,7 @@ import lombok.Setter;
 public class RecipeIngredientDto {
 
 	private Long id;
-	private Recipe recipe; // 재료번호
+	//private Recipe recipe; // 재료번호
 	private String gubun; // 큰 구분
 	private String igdName; // 재료이름
 	private String count; // 중량, 수량

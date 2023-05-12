@@ -35,7 +35,7 @@ public class RecipeFormDto {
 	private String rcMeans; // 카테고리 방법별
 	private String rcTheme; // 카테고리 테마별
 	
-	private List<RecipeStep> recipeSteps = new ArrayList<>(); // 레시피 내용
+	private List<RecipeStep> recipeStep = new ArrayList<>(); // 레시피 내용
 	private List<RecipeIngredient> recipeIngredients = new ArrayList<>(); // 레시피 재료
 	private List<RecipeImgDto> recipeImgDtoList = new ArrayList<>();
 	
@@ -49,6 +49,10 @@ public class RecipeFormDto {
 	
 	public static RecipeFormDto of(Recipe recipe) {
 		return modelMapper.map(recipe, RecipeFormDto.class);
+	}
+	
+	public List<RecipeStep> getRecipeStep() {
+	    return this.recipeStep;
 	}
 
 }
