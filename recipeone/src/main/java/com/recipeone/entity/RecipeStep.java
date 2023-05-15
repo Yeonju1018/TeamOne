@@ -35,7 +35,7 @@ public class RecipeStep extends BaseTimeEntity {
 	private Recipe recipe; // 레시피 번호
 	
 	private String steptext; // 레시피 설명 (조리 설명)
-	private String stepImg; // 레시피 이미지 (조리 이미지)
+	//private String stepImg; // 레시피 이미지 (조리 이미지)
 	
 	public void createRecipeStep(RecipeStepDto recipeStepDto) {
 		//this.id = recipeStepDto.getId();

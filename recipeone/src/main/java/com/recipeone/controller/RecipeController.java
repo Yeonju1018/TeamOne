@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class RecipeController {
 	
 	private final RecipeService recipeService;
-	
+
 	@GetMapping(value = "/admin/item/new")
 	public String recipeForm(Model model) {
 		model.addAttribute("recipeFormDto", new RecipeFormDto());
@@ -31,8 +31,8 @@ public class RecipeController {
 	}
 	
 	@PostMapping("/admin/item/new")
-	public String saveRecipe(@Valid RecipeFormDto recipeFormDto, BindingResult bindingResult,
-			 			Model model, @RequestParam(value="recipeImgFile") List<MultipartFile> recipeImgFileList) {
+	public String saveRecipe(@Valid RecipeFormDto recipeFormDto, BindingResult bindingResult, Model model, 
+							 @RequestParam(value="recipeImgFile") List<MultipartFile> recipeImgFileList) {
 		
 		if(bindingResult.hasErrors()) {
 			return "recipe/recipeForm";
@@ -50,5 +50,12 @@ public class RecipeController {
 			return "recipe/recipeForm";
 		}
 		return "redirect:/";
-	}	
+	}
+	
+	@GetMapping(value = "/cart")
+	public String recipeList() {
+		
+		return "recipe/recipeList";
+	}
+	
 }

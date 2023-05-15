@@ -27,8 +27,8 @@ public class Recipe extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id; // 레시피 아이디
 	
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer num; // 레시피 게시글 번호
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	//private Integer num; // 레시피 게시글 번호
 	
 	@Column(nullable = false, length = 50)
 	private String title; // 레시피 제목
@@ -40,8 +40,8 @@ public class Recipe extends BaseTimeEntity {
 	private String nop; // @인분 (요리정보)
 	//private String rc_thumbnail; // 썸네일 이미지
 	
-	//@OneToMany(mappedBy = "recipe", cascade=CascadeType.PERSIST)
-	//private List<RecipeIngredient> recipeIngredients = new ArrayList<>(); // 레시피 재료
+	@OneToMany(mappedBy = "recipe", cascade=CascadeType.PERSIST, orphanRemoval = true)
+	private List<RecipeIngredient> recipeIngredients = new ArrayList<>(); // 레시피 재료
 	private String tag; // 태그
 	private String rcType; // 카테고리 종류별
 	private String rcSituation; // 카테고리 상황별
@@ -63,5 +63,14 @@ public class Recipe extends BaseTimeEntity {
 		//this.recipeSteps = recipeFormDto.getRecipeSteps(); 
 		//this.recipeIngredients = recipeFormDto.getRecipeIngredients();
 	 }
+	public void addIngredient(RecipeIngredient ingredient) {
+		recipeIngredients.add(ingredient);
+		ingredient.setRecipe(this);
+    }
+
+    public void removeIngredient(RecipeIngredient ingredient) {
+    	recipeIngredients.remove(ingredient);
+        ingredient.setRecipe(null);
+    }
 
 }

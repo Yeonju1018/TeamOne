@@ -19,7 +19,7 @@ public class RecipeFormDto {
 	
 	private Long id; // 레시피 아이디
 	
-	private Integer rc_num; // 레시피 게시글 번호
+	//private Integer rc_num; // 레시피 게시글 번호
 	
 	@NotBlank(message = "제목은 필수!")
 	private String title; // 레시피 제목

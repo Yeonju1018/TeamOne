@@ -1,5 +1,7 @@
 package com.recipeone.service;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +21,19 @@ public class RecipeStepService {
 	private final RecipeStepRepository recipeStepRepository;
 	private RecipeStepDto recipeStepDto;
 	
-	public void saveRecipeStep(RecipeStep recipeStep) {
-		recipeStep.setSteptext(recipeStep.getSteptext());
-		recipeStepRepository.save(recipeStep);
+	public RecipeStep saveRecipeStep(RecipeStep recipeStep) {
+		return recipeStepRepository.save(recipeStep);
+	}
+	
+	public RecipeStep updateRecipeStep(Long id, String steptext) {
+        RecipeStep recipeStep = getRecipeStepById(id);
+        recipeStep.setSteptext(steptext);
+        return recipeStepRepository.save(recipeStep);
+    }
+
+	private RecipeStep getRecipeStepById(Long id) {
+		return recipeStepRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("RecipeStep with ID " + id + " not found"));
 	}
 	
 	/* public void saveRecipeStep(Long recipeId, RecipeStep recipeStep) {
