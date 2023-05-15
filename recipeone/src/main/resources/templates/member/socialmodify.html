@@ -6,7 +6,7 @@
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
-  <style>
+    <style>
         .carousel-inner > .item {
             height: 350px;
         }
@@ -30,9 +30,10 @@
         .center{
             text-align:center;
         }
+
+
     </style>
 </th:block>
-
 
 <script layout:fragment="script" th:inline="javascript">
   const auth2 = [[${#authentication.principal}]]
@@ -43,23 +44,24 @@ if
        else if
     (error && error === 'usernickname'){
         alert("중복된 닉네임이 있습니다.")}
+
+
 </script>
 <div layout:fragment="content">
     <div>
         <form action="/member/socialmodify" method="post" id="registerForm">
             <div class="input-group">
-            <span>아이디</span>
-                <input type="text" name="mid" class="form-control"  th:value="${#authentication.principal.username}" readonly>
+                <span>아이디</span>
+                <input type="text" name="mid" class="form-control" th:value="${#authentication.principal.username}"
+                       readonly>
             </div>
-<!--            <div class="input-group">-->
-<!--                <input type="text" name="oldusernickname" class="form-control"  th:value="${#authentication.principal.usernickname}" readonly hidden="hidden">-->
-<!--            </div>-->
             <div class="input-group">
-            <span>사용자 활동명</span>
-                <input type="text" name="usernickname" class="form-control"  th:value="${#authentication.principal.username}"
-                minlength="2" maxlength="20" pattern="^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣@]*$"
-                title="2~20자의 영문 대소문자, 한글, 숫자만 입력해주세요."
-                placeholder="2~20자의 영문 대소문자, 한글, 숫자만 입력해주세요.">
+                <span>사용자 활동명</span>
+                <input type="text" name="usernickname" class="form-control"
+                       th:value="${#authentication.principal.username}"
+                       minlength="2" maxlength="20" pattern="^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣@]*$"
+                       title="2~20자의 영문 대소문자, 한글, 숫자만 입력해주세요."
+                       placeholder="2~20자의 영문 대소문자, 한글, 숫자만 입력해주세요.">
             </div>
             <div class="input-group">
                 <span>패스워드 설정</span>

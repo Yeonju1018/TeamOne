@@ -16,7 +16,6 @@ public class Custom403Handler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        log.info("-------ACCESS DENIED-------------");
 
         response.setStatus(HttpStatus.FORBIDDEN.value());
         //Json요청이었는지 확인

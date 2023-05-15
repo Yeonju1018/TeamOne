@@ -49,18 +49,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 useremail = getGoogleEmail(paramMap);
                 break;
             case "Naver":
-                log.info("여기1");
                 useremail = getNaverEmail(paramMap);
                 break;
         }
-        log.info("여기2");
         return generateDTO(useremail,paramMap);
     }
     private MemberSecurityDTO generateDTO(String useremail, Map<String,Object> params){
         Optional<Member> result = memberRepository.findByUseremail(useremail);
 
         //데이터베이스에 해당 이메일을 가진 사용자가 없을때
-        if(result.isEmpty()){//회원 추가 -- mid는 이메일 주소/ 패스워드는 1111 / social true로 db에 등록되며 일단 로그인 됨./ 근데 바로 false로 주고 로그인은 가능하게 할지 고민..
+        if(result.isEmpty()){//회원 추가 -- mid는 이메일 주소/ 패스워드는 1111
             Member member = Member.builder()
                     .mid(useremail)
                     .password(passwordEncoder.encode("1111"))
@@ -70,7 +68,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .userlev(1)
                     .build();
             member.addRole(MemberRole.USER);
-            log.info("여기3");
             memberRepository.save(member);
 
             //MemberSecurityDTO 구성 및 반환
@@ -95,34 +92,25 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                             member.getRoleSet()
                                     .stream().map(memberRole -> new SimpleGrantedAuthority("ROLE_"+memberRole.name())).collect(Collectors.toList())
                     ) ;
-            log.info("여기4");
             return memberSecurityDTO;
         }
     }
 
     private String getKakaoEmail(Map<String ,Object>paramMap){
-        log.info("KAKAO-----------------------------------");
         Object value = paramMap.get("kakao_account");
-        log.info(value);
         LinkedHashMap accountMap = (LinkedHashMap) value;
         String useremail = (String) accountMap.get("email");
-        log.info("useremail..." +useremail);
         return useremail;
     }
     private String getGoogleEmail(Map<String, Object> paramMap) {
-        log.info("GOOGLE-----------------------------------");
         String useremail = (String) paramMap.get("email");
-        log.info("useremail..." + useremail);
         return useremail;
     }
 
     private String getNaverEmail(Map<String, Object> paramMap) {
-        log.info("NAVER-----------------------------------");
         Object value = paramMap.get("response");
         LinkedHashMap responseMap = (LinkedHashMap) value;
         String useremail = (String) responseMap.get("email");
-        log.info("useremail..." + useremail);
         return useremail;
     }
-
 }

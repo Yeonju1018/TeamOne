@@ -27,7 +27,6 @@ public interface MemberRepository extends JpaRepository<Member,String> {
     @Query("SELECT password FROM Member WHERE mid = :mid")
     String findPasswordByMid(@Param("mid") String mid);
 
-
     @Modifying
     @Transactional
     @Query("update Member m set m.password = :password, m.social = false where m.mid = :mid")

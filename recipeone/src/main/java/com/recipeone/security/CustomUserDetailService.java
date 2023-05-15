@@ -24,12 +24,10 @@ import java.util.stream.Collectors;
 
 public class CustomUserDetailService implements UserDetailsService {
 
-
     private final MemberRepository memberRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("loadUserByUsername" + username);
 
         Optional<Member> result = memberRepository.getWithRoles(username);
         if (result.isEmpty()) {
@@ -51,9 +49,6 @@ public class CustomUserDetailService implements UserDetailsService {
                         member.getUserlev(),
                         member.getRoleSet().stream().map(memberRole -> new SimpleGrantedAuthority("ROLE_" + memberRole.name())).collect(Collectors.toList())
                 );
-
-        log.info("memberSecurityDTO");
-        log.info(memberSecurityDTO);
 
         return memberSecurityDTO;
     }

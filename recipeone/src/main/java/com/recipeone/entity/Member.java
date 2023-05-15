@@ -19,20 +19,15 @@ public class Member extends BaseEntity{
 
     @Id
     private String mid;
-
     private String password;
     private String useremail;
-
     private String usernickname;
     private int loginFailCount;
-
     private String userfullname;
     private String userphone;
     private String useraddr;
     private boolean social;
     private long userlev;
-//    private String userpost;
-//    private Long usernum;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default

@@ -46,31 +46,7 @@ public class MemberController {
     @PostMapping("/login")
     public String loginPost() {
         log.info("login 성공...........");
-
         return "redirect:/main2";
-    }
-
-
-    @PostMapping("/socialmodify")
-    public String socialmodifyPost(MemberMofifyDTO memberMofifyDTO, RedirectAttributes redirectAttributes, @ModelAttribute Member member) {
-        log.info("socialmodify post...");
-        log.info(memberMofifyDTO);
-        try {
-            memberService.socialmodify(memberMofifyDTO, member); //MemberService의 join()메소드를 호출해서 회원가입 처리
-        } catch (MemberServiceImpl.MidExistException e) { //MemberService에서 MidExistException이 있을 경우(id가 중복되는 경우) error라는 속성에 mid를 담아서 다시 /member/join경로로 redirect한다.
-            redirectAttributes.addFlashAttribute("error", "mid");
-            return "redirect:/member/socialmodify";
-        }catch (MemberService.UserEmailExistException e) {
-            redirectAttributes.addFlashAttribute("error", "useremail");
-            return "redirect:/member/socialmodify";
-        }catch (MemberService.UserNickNameExistException e) {
-            redirectAttributes.addFlashAttribute("error", "usernickname");
-            return "redirect:/member/socialmodify";
-        } catch (MemberService.ConfirmedPasswordException e) {
-            redirectAttributes.addFlashAttribute("error", "confirmedPassword");
-            return "redirect:/member/socialmodify";
-        }  redirectAttributes.addFlashAttribute("result", "success");
-        return "redirect:/";
     }
 
     @GetMapping("/socialmodify")
@@ -78,73 +54,87 @@ public class MemberController {
         log.info("GET modify...........");
     }
 
+    @PostMapping("/socialmodify") //소셜로그인 닉네임,비번바꾸기
+    public String socialmodifyPost(MemberMofifyDTO memberMofifyDTO, RedirectAttributes redirectAttributes, @ModelAttribute Member member) {
+        try {
+            memberService.socialmodify(memberMofifyDTO, member);
+        } catch (MemberServiceImpl.MidExistException e) {
+            redirectAttributes.addFlashAttribute("error", "mid");
+            return "redirect:/member/socialmodify";
+        } catch (MemberService.UserEmailExistException e) {
+            redirectAttributes.addFlashAttribute("error", "useremail");
+            return "redirect:/member/socialmodify";
+        } catch (MemberService.UserNickNameExistException e) {
+            redirectAttributes.addFlashAttribute("error", "usernickname");
+            return "redirect:/member/socialmodify";
+        } catch (MemberService.ConfirmedPasswordException e) {
+            redirectAttributes.addFlashAttribute("error", "confirmedPassword");
+            return "redirect:/member/socialmodify";
+        }
+        redirectAttributes.addFlashAttribute("result", "success");
+        return "redirect:/";
+    }
+
     @GetMapping("/membermodify")
     public void membermodifyGET() {
         log.info("GET membermodify...........");
     }
 
-    @PostMapping("/membermodify")
+    @PostMapping("/membermodify") //회원 기본 정보 수정
     public String membermodifyPost(MemberMofifyDTO memberMofifyDTO, RedirectAttributes redirectAttributes, @ModelAttribute Member member) {
-        log.info("membermodify post...");
-        log.info(memberMofifyDTO);
         try {
             memberService.membermodify(memberMofifyDTO, member);
-        }catch (MemberService.UserEmailExistException e) {
+        } catch (MemberService.UserEmailExistException e) {
             redirectAttributes.addFlashAttribute("error", "useremail");
             return "redirect:/member/membermodify";
-        }catch (MemberService.UserNickNameExistException e) {
+        } catch (MemberService.UserNickNameExistException e) {
             redirectAttributes.addFlashAttribute("error", "usernickname");
             return "redirect:/member/membermodify";
-        }  redirectAttributes.addFlashAttribute("result", "success");
+        }
+        redirectAttributes.addFlashAttribute("result", "success");
         return "redirect:/member/mypage";
     }
-  @GetMapping("/passwordmodify")
+
+    @GetMapping("/passwordmodify")
     public void passwordmodifyGET() {
         log.info("GET passwordmodify...........");
     }
 
-  @PostMapping("/passwordmodify")
-  public String passwordmodifyPost(MemberMofifyDTO memberMofifyDTO, RedirectAttributes redirectAttributes, @ModelAttribute Member member) {
-      log.info("modify post...");
-      log.info(memberMofifyDTO);
-      try {
-          memberService.passwordmodify(memberMofifyDTO, member);
-      } catch (MemberService.WrongPasswordException e) {
-          redirectAttributes.addFlashAttribute("error", "WrongPassword");
-          return "redirect:/member/passwordmodify";
-      }catch (MemberService.ConfirmedmodifyPasswordException e) {
-          redirectAttributes.addFlashAttribute("error", "ConfirmedmodifyPassword");
-          return "redirect:/member/passwordmodify";
-      }  redirectAttributes.addFlashAttribute("result", "success");
-      return "redirect:/member/mypage";
-  }
+    @PostMapping("/passwordmodify") //회원 비밀번호 수정
+    public String passwordmodifyPost(MemberMofifyDTO memberMofifyDTO, RedirectAttributes redirectAttributes, @ModelAttribute Member member) {
+        log.info(memberMofifyDTO);
+        try {
+            memberService.passwordmodify(memberMofifyDTO, member);
+        } catch (MemberService.WrongPasswordException e) {
+            redirectAttributes.addFlashAttribute("error", "WrongPassword");
+            return "redirect:/member/passwordmodify";
+        } catch (MemberService.ConfirmedmodifyPasswordException e) {
+            redirectAttributes.addFlashAttribute("error", "ConfirmedmodifyPassword");
+            return "redirect:/member/passwordmodify";
+        }
+        redirectAttributes.addFlashAttribute("result", "success");
+        return "redirect:/member/mypage";
+    }
 
-
-    @GetMapping("/join") //그냥 /join으로 요청왔을 때
+    @GetMapping("/join")
     public void joinGET() {
         log.info("join get...");
     }
-    @GetMapping("/mypage")
-    public void mypageGET() {
-        log.info("mypage get...");
-    }
-
-
 
     @PostMapping("/join") // 회원가입 폼 작성해서 내용 보낼 때
     public String joinPOST(MemberJoinDTO memberJoinDTO, RedirectAttributes redirectAttributes) {
-        log.info("join post...");
         log.info(memberJoinDTO);
-
         try {
             memberService.join(memberJoinDTO); //MemberService의 join()메소드를 호출해서 회원가입 처리
-        } catch (MemberServiceImpl.MidExistException e) { //MemberService에서 MidExistException이 있을 경우(id가 중복되는 경우) error라는 속성에 mid를 담아서 다시 /member/join경로로 redirect한다.
+        } catch (
+                MemberServiceImpl.MidExistException e) { //MemberService에서 MidExistException이 있을 경우(id가 중복되는 경우) error라는 속성에 mid를 담아서 다시 /member/join경로로 redirect한다.
             redirectAttributes.addFlashAttribute("error", "mid");
             return "redirect:/member/join";
-        } catch (MemberServiceImpl.UserNickNameExistException e) { //MemberService에서 MidExistException이 있을 경우(id가 중복되는 경우) error라는 속성에 mid를 담아서 다시 /member/join경로로 redirect한다.
+        } catch (
+                MemberServiceImpl.UserNickNameExistException e) { //MemberService에서 MidExistException이 있을 경우(id가 중복되는 경우) error라는 속성에 mid를 담아서 다시 /member/join경로로 redirect한다.
             redirectAttributes.addFlashAttribute("error", "usernickname");
             return "redirect:/member/join";
-        }catch (MemberService.UserEmailExistException e) {
+        } catch (MemberService.UserEmailExistException e) {
             redirectAttributes.addFlashAttribute("error", "useremail");
             return "redirect:/member/join";
         } catch (MemberService.ConfirmedPasswordException e) {
@@ -156,11 +146,15 @@ public class MemberController {
         //Flash Attribute를 이용해서 한번의 요청에만 해당 속성값이 전달된다.
         return "redirect:/member/login";
     }
-    // 아이디 중복 확인
-    @PostMapping("/check-username")
+
+    @GetMapping("/mypage") //회원 마이페이지
+    public void mypageGET() {
+        log.info("mypage get...");
+    }
+   
+    @PostMapping("/check-username")  // 아이디 중복 확인
     @ResponseBody
     public Map<String, String> checkUsername(@RequestParam String username) {
-        log.info("username여기로...");
         Map<String, String> result = new HashMap<>();
         boolean isDuplicated = memberService.checkDuplicatedUsername(username);
         if (isDuplicated) {
@@ -171,7 +165,7 @@ public class MemberController {
         return result;
     }
 
-    @PostMapping("/check-usernickname")
+    @PostMapping("/check-usernickname") // 사용자 활동명 중복 확인
     @ResponseBody
     public Map<String, String> checkUsernickname(@RequestParam String usernickname) {
         Map<String, String> result = new HashMap<>();

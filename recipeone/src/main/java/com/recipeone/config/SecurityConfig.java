@@ -33,71 +33,65 @@ import javax.sql.DataSource;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-        private final DataSource dataSource;
-        private final CustomUserDetailService userDetailService;
+    private final DataSource dataSource;
+    private final CustomUserDetailService userDetailService;
     private final MemberRepository memberRepository;
 
-
-
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
-        public PasswordEncoder passwordEncoder(){
-            return new BCryptPasswordEncoder();
-        }
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        log.info("-------------conofigure--------------");
 
-        @Bean
-        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-            log.info("-------------conofigure--------------");
+        http.formLogin().loginPage("/member/login")
+                .failureHandler(authenticationFailureHandler());
 
-            http.formLogin().loginPage("/member/login")    .failureHandler(authenticationFailureHandler());
-            ;
+        http.csrf().disable();
 
+        http.rememberMe()
+                .key("12345678") //application properties에서 나중에 바꿔줄것
+                .tokenRepository(persistentTokenRepository())
+                .userDetailsService(userDetailService)
+                .tokenValiditySeconds(60 * 60 * 24 * 30);
 
+        http.exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 
-            http.csrf().disable();
+        http.oauth2Login().loginPage("/member/login").successHandler(authenticationSuccessHandler());
 
-            http.rememberMe()
-                    .key("12345678") //application properties에서 나중에 바꿔줄것
-                    .tokenRepository(persistentTokenRepository())
-                    .userDetailsService(userDetailService)
-                    .tokenValiditySeconds(60*60*24*30);
+        return http.build();
+    }
 
-            http.exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+    @Bean //정적 메서드 시큐리티 제외
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+    }
 
-            http.oauth2Login().loginPage("/member/login").successHandler(authenticationSuccessHandler());
+    @Bean //로그인 지속
+    public PersistentTokenRepository persistentTokenRepository() { //rememberme db에 저장
+        JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
+        repo.setDataSource(dataSource);
+        return repo;
+    }
 
-            return http.build();
-        }
-        @Bean //정적 메서드 시큐리티 제외
-        public WebSecurityCustomizer webSecurityCustomizer(){
-            log.info("-------------web conofigure--------------");
-
-            return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-        }
-
-        @Bean
-        public PersistentTokenRepository persistentTokenRepository() { //rememberme db에 저장
-            JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
-            repo.setDataSource(dataSource);
-            return repo;
-        }
-
-        @Bean
-        public ModelMapper modelMapper() {
-            return new ModelMapper();
-        }
-
-        @Bean //권한 제한 될 때
-        public AccessDeniedHandler accessDeniedHandler(){
-            return new Custom403Handler();
-        }
-
-        @Bean //소셜 로그인 성공
-        public AuthenticationSuccessHandler authenticationSuccessHandler(){
-            return new CustomSocialLoginSuccessHandler(passwordEncoder());
-
-        }
     @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
+
+    @Bean //권한 제한 될 때
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new Custom403Handler();
+    }
+
+    @Bean //소셜 로그인 성공
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new CustomSocialLoginSuccessHandler(passwordEncoder());
+    }
+
+    @Bean//일반 로그인 실패
     public AuthenticationFailureHandler authenticationFailureHandler() {
         return new CustomLoginFailureHandler(memberRepository);
     }

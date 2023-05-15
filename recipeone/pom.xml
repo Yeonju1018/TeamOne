@@ -147,6 +147,14 @@
 			<scope>test</scope>
 		</dependency>
 
+<!--		검색 기능 유사도 관련-->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+			<version>1.9</version>
+
+		</dependency>
+
 
 	</dependencies>
 

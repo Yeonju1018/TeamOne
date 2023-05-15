@@ -54,6 +54,8 @@
         .button-container button:hover {
             background-color: #0062cc;
         }
+
+
     </style>
     </style>
 </th:block>
@@ -62,36 +64,36 @@
 
     마이페이지
     <form method="post" action="/member/membermodify">
-    <div>회원 아이디
-        <input type="text" name="mid" class="form-control"
-               th:value="${#authentication.principal.username}" readonly>
-    </div>
-  <div> 이메일
-        <input type="text" name="useremail" class="form-control"
-               th:value="${#authentication.principal.useremail}" >
-    </div>
-<div> 사용자 이름
-        <input type="text" name="userfullname" class="form-control"
-               th:value="${#authentication.principal.userfullname}" >
-    </div>
-    <div>사용자 활동명
-        <input type="text" name="usernickname" class="form-control"
-               minlength="2" maxlength="20" pattern="^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣@]*$"
-               title="2~20자의 영문 대소문자, 한글, 숫자만 입력해주세요."
-               placeholder="2~20자의 영문 대소문자, 한글, 숫자만 입력해주세요."
-               th:value="${#authentication.principal.usernickname}" >
-    </div>
-<div> 전화 번호
-        <input type="text" name="userphone" class="form-control"
-               pattern="^\d{3}-\d{3,4}-\d{4}$"
-               title="000-0000-0000 형식으로 입력해주세요."
-               placeholder="000-0000-0000 형식으로 입력해주세요."
-               th:value="${#authentication.principal.userphone}" >
-    </div>
-<div> 주소
-        <input type="text" name="useraddr" class="form-control"
-               th:value="${#authentication.principal.useraddr}" >
-    </div>
+        <div>회원 아이디
+            <input type="text" name="mid" class="form-control"
+                   th:value="${#authentication.principal.username}" readonly>
+        </div>
+        <div> 이메일
+            <input type="text" name="useremail" class="form-control"
+                   th:value="${#authentication.principal.useremail}">
+        </div>
+        <div> 사용자 이름
+            <input type="text" name="userfullname" class="form-control"
+                   th:value="${#authentication.principal.userfullname}">
+        </div>
+        <div>사용자 활동명
+            <input type="text" name="usernickname" class="form-control"
+                   minlength="2" maxlength="20" pattern="^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣@]*$"
+                   title="2~20자의 영문 대소문자, 한글, 숫자만 입력해주세요."
+                   placeholder="2~20자의 영문 대소문자, 한글, 숫자만 입력해주세요."
+                   th:value="${#authentication.principal.usernickname}">
+        </div>
+        <div> 전화 번호
+            <input type="text" name="userphone" class="form-control"
+                   pattern="^\d{3}-\d{3,4}-\d{4}$"
+                   title="000-0000-0000 형식으로 입력해주세요."
+                   placeholder="000-0000-0000 형식으로 입력해주세요."
+                   th:value="${#authentication.principal.userphone}">
+        </div>
+        <div> 주소
+            <input type="text" name="useraddr" class="form-control"
+                   th:value="${#authentication.principal.useraddr}">
+        </div>
 
         <div class="button-container">
             <form method="post" action="/member/membermodify">
@@ -104,4 +106,8 @@
                 <button type="submit">마이페이지</button>
             </form>
         </div>
+    </form>
 </div>
+
+
+

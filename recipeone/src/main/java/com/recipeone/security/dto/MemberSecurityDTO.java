@@ -19,7 +19,6 @@ public class MemberSecurityDTO extends User implements OAuth2User {
     private String password;
     private String useremail;
     private String usernickname;
-
     private boolean social;
     private String userfullname;
     private String userphone;
@@ -31,7 +30,6 @@ public class MemberSecurityDTO extends User implements OAuth2User {
     public MemberSecurityDTO(String username, String password, String useremail,  String usernickname, boolean social,String userfullname,
                              String userphone,String useraddr, long userlev,Collection<? extends GrantedAuthority> authorities){
         super(username,password,authorities);
-
         this.mid=username;
         this.password=password;
         this.useremail=useremail;
