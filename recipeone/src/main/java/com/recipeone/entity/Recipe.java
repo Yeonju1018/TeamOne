@@ -33,8 +33,8 @@ public class Recipe extends BaseTimeEntity {
 	@Column(nullable = false, length = 50)
 	private String title; // 레시피 제목
 	
-	//@OneToMany(mappedBy = "recipe", cascade=CascadeType.PERSIST)
-	//private List<RecipeStep> recipeSteps = new ArrayList<>(); // 레시피 내용(요리순서)
+	@OneToMany(mappedBy = "recipe", cascade=CascadeType.PERSIST)
+	private List<RecipeStep> recipeSteps = new ArrayList<>(); // 레시피 내용(요리순서)
 	
 	private String cooktime; // 조리시간 (요리정보)
 	private String nop; // @인분 (요리정보)
@@ -72,5 +72,15 @@ public class Recipe extends BaseTimeEntity {
     	recipeIngredients.remove(ingredient);
         ingredient.setRecipe(null);
     }
+
+	@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<RecipeImg> recipeImgs = new ArrayList<>();
+
+	public String getImgUrl() {
+		if (!recipeImgs.isEmpty()) {
+			return recipeImgs.get(0).getImgUrl();
+		}
+		return null;
+	}
 
 }

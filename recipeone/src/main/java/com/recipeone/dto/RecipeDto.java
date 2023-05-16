@@ -30,4 +30,5 @@ public class RecipeDto {
 	
 	private LocalDateTime regTime;
     private LocalDateTime updateTime;
+
 }

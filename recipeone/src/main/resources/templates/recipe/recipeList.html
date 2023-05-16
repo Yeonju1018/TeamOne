@@ -76,31 +76,50 @@
   </form>
   <ul class="rcp_m_list2">
     <div class="m_list_tit">
-            총 <b>@</b>개의 맛있는 레시피가 있습니다.
+            총 <b>[[${#lists.size(recipe)}]]</b>개의 맛있는 레시피가 있습니다.
             <ul class="nav nav-tabs2 pull-right" style="position:relative;">
               <li role="presentation"><a href="javascript:void(0);" onClick="goSearchRecipe('order','accuracy')">정확순</a></li>
               <li role="presentation" class="active"><a href="javascript:void(0);" onClick="goSearchRecipe('order','date')">최신순</a></li>
               <li role="presentation"><a href="javascript:void(0);" onClick="goSearchRecipe('order','reco')">추천순</a></li>
             </ul>
     </div>
+      <th:block th:each="recipe : ${recipe}">
     <ul class="common_sp_list_ul ea4" style="padding:0 0 0 8px;">
-      <li class="common_sp_list_li">
+      <li class="common_sp_list_li" >
         <div class="common_sp_thumb">
-          <a href="#" class="common_sp_link">
+          <a th:href="@{'/recipe/recipeDetail/' + ${recipe.id}}" class="common_sp_link">
           	<span class="common_vod_label">
-          	  <img src="https://recipe1.ezmember.co.kr/img/icon_vod.png">
+          	  <!--<img src="https://recipe1.ezmember.co.kr/img/icon_vod.png"> 동영상 링크가 있을때-->
           	</span>
-              <img src="https://recipe1.ezmember.co.kr/cache/recipe/2023/05/15/9f4e71fdc62faeb9f0242ce82290f0681_m.jpg">
+              <img th:src="${recipe.imgUrl}">
           </a>
         </div>
+
         <div class="common_sp_caption">
-          <div class="common_sp_caption_tit line2">제목이 자동으로 나오게</div>
+          <div class="common_sp_caption_tit line2" th:text="${recipe.title}">제목이 자동으로 나오게</div>
           <div class="common_sp_caption_rv_name" style="display: inline-block; vertical-align: bottom;">
-                        <a href="/profile/recipe.html?uid=plc0410"><img src="https://recipe1.ezmember.co.kr/cache/rpf/2021/08/17/c2bf6753df6ec72baeebdb68cc8298531.db976a8912bda41df24720e5cc6912d0">회원 아이디</a>
+                        <a href="/profile/recipe.html?uid=plc0410">
+                        <img src="https://recipe1.ezmember.co.kr/cache/rpf/2021/08/17/c2bf6753df6ec72baeebdb68cc8298531.db976a8912bda41df24720e5cc6912d0">
+                            회원 아이디
+                        </a>
           </div>
         </div>
+
+<!--          <div class="row">
+              <th:block th:each="recipe, status: ${recipe.getTitle()}}">
+                  <div class="col-md-4 margin">
+                      <div class="card">
+                          <a th:href="'/recipe/' + ${recipe.id}" class="text-dark">
+                              <img th:src="${recipe.imgUrl}" class="card-img-top" th:alt="${recipe.title}" height="400">
+                          </a>
+                      </div>
+
+                  </div>
+              </th:block>
+          </div>-->
       </li>
     </ul>
+      </th:block>
   </ul>
 
 </div>

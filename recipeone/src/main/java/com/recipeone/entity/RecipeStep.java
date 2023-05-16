@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.recipeone.dto.RecipeImgDto;
 import com.recipeone.dto.RecipeStepDto;
 
 import lombok.Getter;
@@ -35,13 +36,20 @@ public class RecipeStep extends BaseTimeEntity {
 	private Recipe recipe; // 레시피 번호
 	
 	private String steptext; // 레시피 설명 (조리 설명)
-	//private String stepImg; // 레시피 이미지 (조리 이미지)
+
+	@ManyToOne
+	@JoinColumn(name="recipe_img_id")
+	private RecipeImg recipeImg; // 레시피 이미지 (조리 이미지)
 	
 	public void createRecipeStep(RecipeStepDto recipeStepDto) {
 		//this.id = recipeStepDto.getId();
 		//this.recipe = recipeStepDto.getRecipe();
 		this.steptext = recipeStepDto.getSteptext();
 		//this.stepImg = recipeStepDto.getStepImg();
+	}
+
+	public void setRecipeImg(RecipeImg recipeImg) {
+			this.recipeImg = recipeImg;
 	}
 	
 }

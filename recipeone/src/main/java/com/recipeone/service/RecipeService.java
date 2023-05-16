@@ -26,16 +26,16 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class RecipeService {
-	
+
 	private final RecipeRepository recipeRepository;
 	private final RecipeImgService recipeImgService;
 	private final RecipeImgRepository recipeImgRepository;
 	private final RecipeStepRepository recipeStepRepository;
 	private final RecipeStepService recipeStepService;
 	private RecipeIngredientService recipeIngredientService;
-	
+
 	public Long saveRecipe(RecipeFormDto recipeFormDto, List<MultipartFile> recipeImgFileList) throws Exception {
-		
+
 		// 레시피 등록
 		Recipe recipe = recipeFormDto.createRecipe();
 		recipeRepository.save(recipe);
@@ -53,7 +53,7 @@ public class RecipeService {
             }
             recipeImgService.saveRecipeImg(recipeImg, recipeImgFileList.get(i));
         }
-		
+
 		// 요리순서 등록
 		List<RecipeStep> recipeSteps = new ArrayList<>();
 		for (int j=0; j<recipeImgFileList.size(); j++) {
@@ -62,15 +62,16 @@ public class RecipeService {
 			recipeStep.setSteptext("왜 값이 안들어갈까"+j);
 			//Map<String, Object> steptext = new HashMap<String, Object>();
 			//steptext.put(recipeStep.getSteptext(), j);
+
 			recipeSteps.add(recipeStep);
 			//recipeStepService.saveRecipeStep(recipeStep);
 		}
-		recipeStepRepository.saveAll(recipeSteps);	
-		
+		recipeStepRepository.saveAll(recipeSteps);
+
         return recipe.getId();
 	}
-	
-	
+
+
 	public void addIngredientToRecipe(Long recipeId, RecipeIngredientDto recipeIngredientDto) {
         Recipe recipe = getRecipeById(recipeId);
 
@@ -93,5 +94,7 @@ public class RecipeService {
         return recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new NoSuchElementException("Recipe with ID " + recipeId + " not found"));
     }
+
+
 
 }
