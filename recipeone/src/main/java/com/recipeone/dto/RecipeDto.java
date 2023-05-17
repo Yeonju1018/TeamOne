@@ -16,6 +16,7 @@ public class RecipeDto {
 	
 	private Long id;
 	private String title;
+	private String writer; // 사용자 아이디
 	private List<RecipeStep> recipeSteps = new ArrayList<>();
 	private String cooktime;
 	private String nop; // @인분

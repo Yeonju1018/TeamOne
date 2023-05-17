@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,18 +26,19 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/recipe")
 public class RecipeController {
 
 	private final RecipeService recipeService;
 	private final RecipeRepository recipeRepository;
 
-	@GetMapping(value = "/admin/item/new")
+	@GetMapping(value = "/recipeForm")
 	public String recipeForm(Model model) {
 		model.addAttribute("recipeFormDto", new RecipeFormDto());
 		return "recipe/recipeForm";
 	}
 
-	@PostMapping("/admin/item/new")
+	@PostMapping("/recipeForm")
 	public String saveRecipe(@Valid RecipeFormDto recipeFormDto, BindingResult bindingResult, Model model,
 							 @RequestParam(value="recipeImgFile") List<MultipartFile> recipeImgFileList) {
 
@@ -58,7 +60,7 @@ public class RecipeController {
 		return "redirect:/";
 	}
 
-	@GetMapping(value = "/cart")
+	@GetMapping(value = "/recipeList")
 	public String recipeList(@RequestParam Map<String, String> param, Model model) {
 		List<Recipe> recipeList = recipeRepository.findAll(); // DB에서 레시피 목록 조회
 

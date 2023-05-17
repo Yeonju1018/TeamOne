@@ -18,6 +18,8 @@ import lombok.Setter;
 public class RecipeFormDto {
 	
 	private Long id; // 레시피 아이디
+
+	private String writer; // 사용자 아이디
 	
 	//private Integer rc_num; // 레시피 게시글 번호
 	

@@ -26,6 +26,8 @@ public class Recipe extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id; // 레시피 아이디
+
+	private String writer; // 사용자 아이디
 	
 	//@GeneratedValue(strategy = GenerationType.AUTO)
 	//private Integer num; // 레시피 게시글 번호

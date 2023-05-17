@@ -83,6 +83,10 @@
               <li role="presentation"><a href="javascript:void(0);" onClick="goSearchRecipe('order','reco')">추천순</a></li>
             </ul>
     </div>
+<!--      <ul>
+          <li th:each="recipeId : ${recipeIds}" th:text="${recipeId}"></li>
+      </ul>--> <!-- 검색 시 나오는 레시피 -->
+
       <th:block th:each="recipe : ${recipe}">
     <ul class="common_sp_list_ul ea4" style="padding:0 0 0 8px;">
       <li class="common_sp_list_li" >
