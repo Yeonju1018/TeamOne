@@ -61,7 +61,8 @@ public class Recipe extends BaseTimeEntity {
 		this.rcType = recipeFormDto.getRcType(); 
 		this.rcSituation = recipeFormDto.getRcSituation(); 
 		this.rcIngredient = recipeFormDto.getRcIngredient(); 
-		this.rcMeans = recipeFormDto.getRcMeans(); 
+		this.rcMeans = recipeFormDto.getRcMeans();
+		this.tag = recipeFormDto.getTag();
 		//this.recipeSteps = recipeFormDto.getRecipeSteps(); 
 		//this.recipeIngredients = recipeFormDto.getRecipeIngredients();
 	 }

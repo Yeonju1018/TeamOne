@@ -148,14 +148,21 @@
 		 	<input type="text" name="gubun" placeholder="재료/양념 구분">
 		    <input type="text" name="igdName" placeholder="재료명">
 		    <input type="text" name="count" placeholder="중량정보"><br />
-		</div>    
+		</div>
+
+		<p class="h3 subheading" name="tag">태그&nbsp;&nbsp;&nbsp;</p>
+		<div class="input-group">
+			<input type="text" name="title" placeholder="#감자 #춘식이" style="width:610px;"><br />
+		</div>
+
 	    <div class="regi_btm" th:if="${#strings.isEmpty(recipeFormDto.id)}">
-		    <button th:formaction="@{/admin/item/new}" id="savebutton" type="submit" class="btn-lg btn-primary">저장</button>
+		    <button th:formaction="@{/recipe/recipeForm}" id="savebutton" type="submit" class="btn-lg btn-primary">저장</button>
 			<button type="button" onclick="history.back();" class="btn-lg btn-default">취소</button>
 		</div>
 		<div th:unless="${#strings.isEmpty(recipeFormDto.id)}" style="text-align: center">
-	      <button th:formaction="@{'/admin/item/' + ${recipeFormDto.id} }" type="submit" class="btn btn-primary">수정</button>
+	      <button th:formaction="@{'/recipe/recipeModify/' + ${recipeFormDto.id} }" type="submit" class="btn btn-primary">수정</button>
 	    </div>
+
 	</div> <!-- container END -->
 
 
