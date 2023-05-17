@@ -23,10 +23,10 @@ import com.recipeone.service.RecipeService;
 
 import lombok.RequiredArgsConstructor;
 
-
 @Controller
-@RequiredArgsConstructor
 @RequestMapping("/recipe")
+@Log4j2
+@RequiredArgsConstructor
 public class RecipeController {
 
 	private final RecipeService recipeService;
@@ -72,8 +72,42 @@ public class RecipeController {
 
 		model.addAttribute("recipe", listRecipeDtoList);
 		return "recipe/recipeList";
-	}
+
+    private final RecipeSampleService recipeSampleService;
+
+    private final RecipeSampleRepository recipeSampleRepository;
+
+    @PreAuthorize("principal.username==#boardDTO.writer") //작성자와 동일한 user만 수정 페이지 가능
+    @GetMapping("/modify")
+    public void modify() {
+    }
+
+    @RequestMapping(value="/recommendKeywords", method=RequestMethod.POST)
+    @ResponseBody
+    public List<String> getRecommendedKeywords(@RequestParam String keyword) {
+        List<String> recommendedKeywords = null;
+        try {
+            recommendedKeywords = recipeSampleService.recommendKeywords(keyword);
+        } catch (RecipeSampleService.RecipeIdExistException e) {
+            // 예외 처리 코드
+        }
+        return recommendedKeywords;
+    }
+
+    @PostMapping("/recipelist")
+    public String recipelistPOST(@RequestParam("keyword") String keyword, RedirectAttributes redirectAttributes, Model model) {
+        try {
+            List<Long> recipeIds = recipeSampleService.searched(keyword);
+            log.info("recupeIds는======"+recipeIds);
+            redirectAttributes.addFlashAttribute("recipeIds", recipeIds);
+            redirectAttributes.addFlashAttribute("result", "success");
+        } catch (RecipeSampleService.RecipeIdExistException e) {
+            redirectAttributes.addFlashAttribute("error", "id");
+        }
+        return "redirect:/recipe/recipeList";
+    }
+	}}
 
 
 
-}
+
