@@ -21,22 +21,10 @@ public class RecipeController {
 
     private final RecipeSampleRepository recipeSampleRepository;
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'CHEF')")
-    @GetMapping("/register")
-    public String registerGET() {
-        return "/recipe/register";
-    }
-
     @PreAuthorize("principal.username==#boardDTO.writer") //작성자와 동일한 user만 수정 페이지 가능
     @GetMapping("/modify")
     public void modify() {
     }
-
-    @GetMapping("/recipelist")
-    public void recipelistGET() {
-
-    }
-
 
     @RequestMapping(value="/recommendKeywords", method=RequestMethod.POST)
     @ResponseBody
@@ -50,7 +38,6 @@ public class RecipeController {
         return recommendedKeywords;
     }
 
-//아래는 되는 기본 코드
     @PostMapping("/recipelist")
     public String recipelistPOST(@RequestParam("keyword") String keyword, RedirectAttributes redirectAttributes, Model model) {
         try {
@@ -61,6 +48,6 @@ public class RecipeController {
         } catch (RecipeSampleService.RecipeIdExistException e) {
             redirectAttributes.addFlashAttribute("error", "id");
         }
-        return "redirect:/recipe/recipelist";
+        return "redirect:/recipe/recipeList";
     }
 }

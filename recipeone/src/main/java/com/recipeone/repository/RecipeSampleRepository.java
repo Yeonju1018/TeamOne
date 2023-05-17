@@ -14,13 +14,8 @@ public interface RecipeSampleRepository extends JpaRepository<RecipeSample,Strin
     @Query("SELECT DISTINCT rs.tag FROM RecipeSample rs")
     List<String> findtaglist();
 
-//    @Query("select r.id from RecipeSample r where r.title like %:recommendedKeywords% or r.tag like %:recommendedKeywords%")
-//    List<Long> findRecipeIdByrecommendedKeywords(@Param("recommendedKeywords") String recommendedKeywords);
     @Query("select r.id from RecipeSample r where r.title IN :recommendedKeywords or r.tag IN :recommendedKeywords")
     List<Long> findRecipeIdByrecommendedKeywords(@Param("recommendedKeywords") List<String> recommendedKeywords);
-    //아래는 되는 기본코드
-//    @Query("select r.id from RecipeSample r where r.title like %:keyword% or r.tag like %:keyword%")
-//    List<Long> findRecipeIdByKeyword(@Param("keyword") String keyword);
 
 }
 

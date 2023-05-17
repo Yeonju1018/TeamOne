@@ -1,4 +1,4 @@
-package com.doodoo.project;
+package com.recipeone;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
