@@ -6,7 +6,7 @@ import com.recipeone.entity.Recipe;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-public interface RecipeSampleService {
+public interface RecipeService {
 //추가
 List<String> recommendKeywords(String keyword) throws RecipeIdExistException;
 
@@ -17,5 +17,6 @@ List<String> recommendKeywords(String keyword) throws RecipeIdExistException;
     List<Long> searched(String keyword) throws RecipeIdExistException;
     public Long saveRecipe(RecipeFormDto recipeFormDto, List<MultipartFile> recipeImgFileList) throws Exception;
     public void addIngredientToRecipe(Long recipeId, RecipeIngredientDto recipeIngredientDto);
-    public Recipe getRecipeById(Long recipeId);
+    public Recipe getRecipeById(Long recipeId); 
+//    public List<Long> filterSearched(String keyword) throws RecipeIdExistException; //진행중
 }

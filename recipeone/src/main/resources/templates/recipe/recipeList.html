@@ -2,6 +2,24 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
+<script>
+<!--진행중-->
+<!--    // 서버에 키워드를 전송하는 함수-->
+<!--function goSearchRecipe(category, value) {-->
+<!--  $.ajax({-->
+<!--    url: '/recipe/filtersearch',-->
+<!--    method: 'POST',-->
+<!--    data: { category: category, value: value },-->
+<!--    success: function(response) {-->
+<!--      // 서버에서 받은 응답을 처리하는 코드-->
+<!--    },-->
+<!--    error: function(xhr, status, error) {-->
+<!--      // 에러 처리 코드-->
+<!--    }-->
+<!--  });-->
+<!--}-->
+</script>
+
 <div layout:fragment="content">
 
   <div id="id_search_category" style="display:none" class="rcp_m_cate">
@@ -40,7 +58,7 @@
             <span>테마별</span>
           </th>
           <td>
-            <div id="id_search_category" style="padding:6px 15px 0px 12px" class="rcp_cate st3">
+            <div id="id_search_category2" style="padding:6px 15px 0px 12px" class="rcp_cate st3">
                 <div class="cate_list">
                     <a href="/theme/list.html?t1=101012">여성/뷰티</a>
                     <a href="/theme/list.html?t1=101013">엄마/아기</a>
