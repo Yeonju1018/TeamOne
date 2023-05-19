@@ -38,6 +38,7 @@ public class RecipeController {
         model.addAttribute("recipeFormDto", new RecipeFormDto());
         return "recipe/recipeForm";
     }
+
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_CHEF')")
     @PostMapping("/recipeForm")
     public String saveRecipe(@Valid RecipeFormDto recipeFormDto, BindingResult bindingResult, Model model,
@@ -79,18 +80,38 @@ public class RecipeController {
     @GetMapping("/modify")
     public void modify() {
     }
+    @GetMapping("/test")
+    public void test() {
+    }
 
 //    진행중
+    @RequestMapping(value = "/filtersearch", method = RequestMethod.POST)
+    @ResponseBody
+    public void goSearchRecipe2(@RequestParam String rcType) {
+       log.info(rcType);
+       log.info("----------------------");
+    }
+////    진행중
 //    @RequestMapping(value = "/filtersearch", method = RequestMethod.POST)
 //    @ResponseBody
-//    public List<String> goSearchRecipe(@RequestParam String keyword) {
-//        List<String> recommendedKeywords = null;
+//    public List<Long> goSearchRecipe2(@RequestParam String rcType, @RequestParam String rcSituation, @RequestParam String rcMeans, @RequestParam String rcIngredient, @RequestParam(required = false, defaultValue = "") String keyword) {
+//       log.info(rcType);
+//       log.info(rcSituation);
+//       log.info(rcMeans);
+//       log.info(rcIngredient);
+//       log.info(keyword);
+//       log.info("----------------------");
+//
+//        List<Long> recipeIds = null;
+//
 //        try {
-//            recommendedKeywords = recipeService.recommendKeywords(keyword);
+//            List<String> recommendedKeywords = recipeService.recommendKeywords(keyword);
+////            List<String> recommendedKeywords = recipeService.recommendKeywords(keyword);
+//            recipeIds = recipeService.filterSearched(recommendedKeywords, rcType, rcSituation, rcMeans, rcIngredient);
 //        } catch (RecipeService.RecipeIdExistException e) {
 //            // 예외 처리 코드
 //        }
-//        return recommendedKeywords;
+//        return recipeIds;
 //    }
 
     @RequestMapping(value = "/recommendKeywords", method = RequestMethod.POST)

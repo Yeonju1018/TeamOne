@@ -49,16 +49,15 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeIds;
     }
 //진행중
-//  @Override
-//    public List<Long> filterSearched(String keyword) throws RecipeIdExistException {
-//        List<String> recommendedKeywords = recommendKeywords(keyword);
-//        log.info("recommendedKeywords======" + recommendedKeywords);
-//        List<Long> recipeIds = recipeRepository.findRecipeIdByfilterSearched(recommendedKeywords,rcType,rcSituation,rcMeans,rcIngredient);
-//        if (recipeIds.isEmpty()) {
-//            throw new RecipeIdExistException();
-//        }
-//        return recipeIds;
-//    }
+  @Override
+    public List<Long> filterSearched(List<String> recommendedKeywords, String rcType, String rcSituation, String rcMeans, String rcIngredient) throws RecipeIdExistException {
+        log.info("recommendedKeywords======" + recommendedKeywords);
+        List<Long> recipeIds = recipeRepository.findRecipeIdByfilterSearched(recommendedKeywords,rcType,rcSituation,rcMeans,rcIngredient);
+        if (recipeIds.isEmpty()) {
+            throw new RecipeIdExistException();
+        }
+        return recipeIds;
+    }
 
     @Override
     public List<String> recommendKeywords(String keyword) throws RecipeIdExistException {
