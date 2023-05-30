@@ -2,11 +2,8 @@ package com.recipeone.config;
 
 import com.recipeone.repository.MemberRepository;
 import com.recipeone.security.CustomUserDetailService;
-import com.recipeone.security.handler.Custom403Handler;
+import com.recipeone.security.handler.*;
 //import com.recipeone.security.handler.CustomAuthenticationFailureHandler;
-import com.recipeone.security.handler.CustomLoginFailureHandler;
-import com.recipeone.security.handler.CustomLoginSuccessHandler;
-import com.recipeone.security.handler.CustomSocialLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -15,6 +12,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +24,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.persistence.Access;
 import javax.sql.DataSource;
@@ -32,7 +33,8 @@ import javax.sql.DataSource;
 @Configuration
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig {
+
+public class SecurityConfig  {
 
     private final DataSource dataSource;
     private final CustomUserDetailService userDetailService;
@@ -59,6 +61,15 @@ public class SecurityConfig {
                 .tokenRepository(persistentTokenRepository())
                 .userDetailsService(userDetailService)
                 .tokenValiditySeconds(60 * 60 * 24 * 30);
+
+        http.logout()
+                .logoutUrl("/logout") //로그아웃 URL
+                .logoutSuccessUrl("/") //로그아웃 성공시 이동할 URL
+                .invalidateHttpSession(true) //HttpSession 무효화 여부
+                .deleteCookies("JSESSIONID", "remember-me") //삭제할 쿠키 이름
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout")) //로그아웃 요청 매칭 규칙
+                .addLogoutHandler(new CustomLogoutHandler(persistentTokenRepository())); //로그아웃 핸들러 추가
+
 
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 
@@ -102,6 +113,7 @@ public class SecurityConfig {
     public AuthenticationSuccessHandler customLoginSuccessHandler() {
         return new CustomLoginSuccessHandler(memberRepository);
     }
+
 
 
 }
