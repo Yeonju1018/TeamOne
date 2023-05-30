@@ -2,6 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
+
+<th:block latout:fragment="css">
+    <style>
+        ul {
+            display: flex;
+      flex-direction: row;
+        }
+    </style>
+</th:block>
+
 <div layout:fragment="content">
 
   <div id="id_search_category" style="display:none" class="rcp_m_cate">
@@ -54,9 +64,9 @@
         </tbody>
     </table>
   </div>
-  <div class="rcp_cate_btn"><a href="javascript:ToggleCategory()"><span id="id_search_category_text">카테고리 열기</span><span><img id="id_search_category_img" src="https://recipe1.ezmember.co.kr/img/icon_arrow9_down.gif"></span></a></div>
+    <div class="rcp_cate_btn"><a href="javascript:ToggleCategory()"><span id="id_search_category_text">카테고리 열기</span><span><img id="id_search_category_img" src="https://recipe1.ezmember.co.kr/img/icon_arrow9_down.gif"></span></a></div>
 
-  <form id="srRecipeFrm" name="srRecipeFrm" method="get" action="/recipe/recipeList.html">
+    <form id="srRecipeFrm" name="srRecipeFrm" method="get" action="/recipe/recipeList.html">
 	    <input type="hidden" name="q" value="">
 	    <input type="hidden" id="q_query" name="query" value="">
 	    <input type="hidden" name="cat1" value="">
@@ -87,22 +97,24 @@
           <li th:each="recipeId : ${recipeIds}" th:text="${recipeId}"></li>
       </ul>--> <!-- 검색 시 나오는 레시피 -->
 
-      <th:block th:each="recipe : ${recipe}">
+      <th:block th:each="recipe : ${recipe}" >
     <ul class="common_sp_list_ul ea4" style="padding:0 0 0 8px;">
       <li class="common_sp_list_li" >
         <div class="common_sp_thumb">
-          <a th:href="@{'/recipe/recipeDetail/' + ${recipe.id}}" class="common_sp_link">
-          	<span class="common_vod_label">
-          	  <!--<img src="https://recipe1.ezmember.co.kr/img/icon_vod.png"> 동영상 링크가 있을때-->
-          	</span>
-              <img th:src="${recipe.imgUrl}">
+          <a th:href="@{'/recipe/recipeDetail/' + ${recipe.recipeNo}}" class="common_sp_link">
+<!--      <span class="common_vod_label">
+          	  <img src="https://recipe1.ezmember.co.kr/img/icon_vod.png"> 동영상 링크가 있을때
+          </span>-->
+<!--              <img th:src="${recipe.mainPicRename}">-->
+              <img th:src="${recipe.mainPicRename}">
+
           </a>
         </div>
 
         <div class="common_sp_caption">
           <div class="common_sp_caption_tit line2" th:text="${recipe.title}">제목이 자동으로 나오게</div>
           <div class="common_sp_caption_rv_name" style="display: inline-block; vertical-align: bottom;">
-                        <a href="/profile/recipe.html?uid=plc0410">
+                        <a href="/recipe/recipe.html?uid=plc0410">
                         <img src="https://recipe1.ezmember.co.kr/cache/rpf/2021/08/17/c2bf6753df6ec72baeebdb68cc8298531.db976a8912bda41df24720e5cc6912d0">
                             회원 아이디
                         </a>
