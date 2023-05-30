@@ -64,4 +64,24 @@ public interface RecipeService {
 	public int checkMyRecipe(int recipeNo, String memberEmail);
 
 	public String getMemberEmial(int recipeNo);
+	
+	
+    List<String> recommendKeywords(String keyword) throws RecipeIdExistException;
+
+    static class RecipeIdExistException extends Exception { }
+
+    static class RecipeExistException extends Exception { }
+
+    List<Long> searched(String keyword) throws RecipeIdExistException;
+
+    public Long saveRecipe(RecipeFormDto recipeFormDto, List<MultipartFile> recipeImgFileList) throws Exception;
+
+    public void addIngredientToRecipe(Long recipeId, RecipeIngredientDto recipeIngredientDto);
+
+    public Recipe getRecipeById(Long recipeId);
+
+    public List<Long> filterSearchedId(List<String> recommendedKeywords, String rctype, String rcsituation, String rcmeans, String rcingredient) throws RecipeIdExistException;
+
+    public List<Recipe> filterSearchedRecipe(List<String> recommendedKeywords, String rctype, String rcsituation, String rcmeans, String rcingredient,  Model model) throws RecipeExistException;
+
 }
