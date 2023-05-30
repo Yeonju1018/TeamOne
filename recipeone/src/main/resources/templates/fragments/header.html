@@ -105,23 +105,7 @@ $(document).ready(function() {
     });
   });
 
-<!--레시피 목록 메뉴-->
-  function postToRecipeList() {
-    var form = document.createElement('form');
-    form.method = 'POST';
-    form.action = 'recipe/recipeList';
 
-    var keywordInput = document.createElement('input');
-    keywordInput.type = 'hidden';
-    keywordInput.name = 'keyword';
-    keywordInput.value = null;
-
-    form.appendChild(keywordInput);
-
-    document.body.appendChild(form);
-    form.submit();
-  }
-});});
 
 
 </script>
@@ -178,7 +162,7 @@ $(document).ready(function() {
   <nav class="navbar navbar-expand-sm bg-light navbar-light">
     <ul class="navbar-nav w-100 d-flex justify-content-around">
 
-        <a class="nav-link"  th:href="@{/recipe/recipeList}" onclick="postToRecipeList()">레시피 목록</a>
+      <a class="nav-link" href="#" onclick="postToRecipeList('keyword', null)">레시피 목록</a>
 
       <li class="nav-item">
         <a class="nav-link" href="#">최근본 레시피</a>
@@ -194,5 +178,25 @@ $(document).ready(function() {
       </li>
     </ul>
   </nav>
+  <script>
+    function postToRecipeList(field, value) {
+  var form = document.createElement('form');
+  form.action = '/recipe/recipeList';
+  form.method = 'post';
+
+  var input = document.createElement('input');
+  input.type = 'hidden';
+  input.name = field;
+  input.value = value;
+
+  form.appendChild(input);
+  document.body.appendChild(form);
+
+  form.submit();
+}
+
+  </script>
+
+
 </div>
 </html>

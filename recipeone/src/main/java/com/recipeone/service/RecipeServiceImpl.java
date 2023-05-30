@@ -31,7 +31,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class RecipeServiceImpl implements RecipeService {
     private final ModelMapper modelMapper;
-    //    private final RecipeSampleRepository recipeSampleRepository;
     private final RecipeRepository recipeRepository;
     private final RecipeImgService recipeImgService;
     private final RecipeImgRepository recipeImgRepository;
@@ -42,7 +41,6 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public List<Long> searched(String keyword) throws RecipeIdExistException {
         List<String> recommendedKeywords = recommendKeywords(keyword);
-        log.info("recommendedKeywords======" + recommendedKeywords);
         List<Long> recipeIds = recipeRepository.findRecipeIdByrecommendedKeywords(recommendedKeywords);
         if (recipeIds.isEmpty()) {
             throw new RecipeIdExistException();
@@ -50,51 +48,21 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeIds;
     }
 
-//진행중
-  @Override
-    public List<Long> filterSearched(List<String> recommendedKeywords, String rctype, String rcsituation, String rcmeans, String rcingredient) throws RecipeIdExistException {
-        log.info("recommendedKeywords======" + recommendedKeywords);
-//      if (rctype.isEmpty()){rctype = null;}
-//      if (rcsituation.isEmpty()){rcsituation = null;}
-//      if (rcingredient.isEmpty()){rcingredient = null;}
-//      if (rcmeans.isEmpty()){rcmeans = null;}
-      log.info("aaa"+rctype + "rcType2");
-      log.info(rcsituation + "rcSituation2");
-      log.info(rcingredient + "rcIngredient2");
-      log.info(rcmeans + "rcMeans2");
-//        List<Long> recipeIds = recipeRepository.findRecipeIdByfilterSearched(recommendedKeywords,rctype,rcsituation,rcmeans,rcingredient);
+    @Override
+    public List<Long> filterSearchedId(List<String> recommendedKeywords, String rctype, String rcsituation, String rcmeans, String rcingredient) throws RecipeIdExistException {
       List<Long> recipeIds = recipeRepository.findRecipeIdByfilterSearched(recommendedKeywords,rctype,rcsituation,rcmeans,rcingredient);
-//      if (recipeIds.isEmpty()) {
-//            throw new RecipeIdExistException();
-//        }
-      log.info(recipeIds + "recipeIds222");
         return recipeIds;
     }
-    @Override
-    public List<Recipe> filterSearched2(List<String> recommendedKeywords, String rctype, String rcsituation, String rcmeans, String rcingredient,  Model model) throws RecipeIdExistException {
-        log.info("recommendedKeywords======" + recommendedKeywords);
-//      if (rctype.isEmpty()){rctype = null;}
-//      if (rcsituation.isEmpty()){rcsituation = null;}
-//      if (rcingredient.isEmpty()){rcingredient = null;}
-//      if (rcmeans.isEmpty()){rcmeans = null;}
-      log.info("aaa"+rctype + "rcType2");
-      log.info(rcsituation + "rcSituation2");
-      log.info(rcingredient + "rcIngredient2");
-      log.info(rcmeans + "rcMeans2");
-//        List<Long> recipeIds = recipeRepository.findRecipeIdByfilterSearched(recommendedKeywords,rctype,rcsituation,rcmeans,rcingredient);
-        List<Recipe> recipecont = recipeRepository.findRecipesByFilterSearched(recommendedKeywords,rctype,rcsituation,rcmeans,rcingredient);
 
-//      if (recipeIds.isEmpty()) {
-//            throw new RecipeIdExistException();
-//        }
+    @Override
+    public List<Recipe> filterSearchedRecipe(List<String> recommendedKeywords, String rctype, String rcsituation, String rcmeans, String rcingredient,  Model model) throws RecipeExistException {
+        List<Recipe> recipecont = recipeRepository.findRecipesByFilterSearched(recommendedKeywords,rctype,rcsituation,rcmeans,rcingredient);
         List<ListRecipeDto> listRecipeDtoList = new ArrayList<>();
         for (Recipe recipe : recipecont) {
-            ListRecipeDto listRecipeDto = new ListRecipeDto(recipe.getId(), recipe.getTitle(), recipe.getImgUrl());
+            ListRecipeDto listRecipeDto = new ListRecipeDto(recipe.getId(), recipe.getTitle(), recipe.getImgUrl(),recipe.getTag(),recipe.getWriter());
             listRecipeDtoList.add(listRecipeDto);
         }
         model.addAttribute("recipe", listRecipeDtoList);
-
-
         return recipecont;
     }
 
@@ -102,7 +70,7 @@ public class RecipeServiceImpl implements RecipeService {
     public List<String> recommendKeywords(String keyword) throws RecipeIdExistException {
 
         List<String> titleList = recipeRepository.findtitlelist();
-//        List<String> taglist = recipeRepository.findtaglist(); 
+//        List<String> taglist = recipeRepository.findtaglist();
         List<String> taglist = new ArrayList<>(Arrays.asList("a", "b")); //레시피 등록할 때 태그 들어가면 삭제
         double similarityRatio = 0.5;
         log.info("titleList======" + titleList);

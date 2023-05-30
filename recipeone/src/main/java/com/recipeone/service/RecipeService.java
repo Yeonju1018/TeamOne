@@ -12,13 +12,12 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface RecipeService {
-    //추가
+
     List<String> recommendKeywords(String keyword) throws RecipeIdExistException;
 
+    static class RecipeIdExistException extends Exception { }
 
-    //    아래는 되는 기본코드
-    static class RecipeIdExistException extends Exception {
-    }
+    static class RecipeExistException extends Exception { }
 
     List<Long> searched(String keyword) throws RecipeIdExistException;
 
@@ -28,8 +27,8 @@ public interface RecipeService {
 
     public Recipe getRecipeById(Long recipeId);
 
-    //    public List<Long> filterSearched(String keyword) throws RecipeIdExistException; //진행중
-    public List<Long> filterSearched(List<String> recommendedKeywords, String rctype, String rcsituation, String rcmeans, String rcingredient) throws RecipeIdExistException;
-    public List<Recipe> filterSearched2(List<String> recommendedKeywords, String rctype, String rcsituation, String rcmeans, String rcingredient,  Model model) throws RecipeIdExistException;
+    public List<Long> filterSearchedId(List<String> recommendedKeywords, String rctype, String rcsituation, String rcmeans, String rcingredient) throws RecipeIdExistException;
+
+    public List<Recipe> filterSearchedRecipe(List<String> recommendedKeywords, String rctype, String rcsituation, String rcmeans, String rcingredient,  Model model) throws RecipeExistException;
 
 }
