@@ -7,12 +7,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
+import java.util.Map;
+import java.util.Optional;
+
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 
 import com.recipeone.dto.ListRecipeDto;
+
 import com.recipeone.entity.Member;
+
+
 import com.recipeone.entity.Recipe;
 import com.recipeone.entity.RecipeIngredient;
 import com.recipeone.entity.RecipeStep;
@@ -21,6 +29,7 @@ import com.recipeone.service.RecipeService;
 import lombok.extern.log4j.Log4j2;
 
 import org.apache.commons.io.IOUtils;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -86,10 +95,12 @@ public class RecipeController {
 					return "error";
 				}
 
+
 				mainPicture.transferTo(new File(fileUrl + mainPicRename));// 파일을 buploadFile경로에 저장
 				recipe.setMainpic(mainPic);
 				recipe.setMainpicrename(mainPicRename);
 				model.addAttribute("mainPic", mainPicRename);
+
 			}
 			log.info(">>>mainPic는======" + mainPic);
 
@@ -226,7 +237,6 @@ public class RecipeController {
 		} else {
 			rcmeans = (String) session.getAttribute("rcmeans");
 		}
-
 		List<String> recommendedKeywords = (List<String>) session.getAttribute("recommendedKeywords");
 		List<Recipe> recipeList = recipeRepository.findRecipesByFilterSearched(recommendedKeywords, rctype, rcsituation, rcingredient, rcmeans); // DB에서 레시피 목록 조회
 		List<ListRecipeDto> listRecipeDtoList = new ArrayList<>();
@@ -292,6 +302,7 @@ public class RecipeController {
 		return "recipe/recipeDetail";
 	}
 
+
 	@GetMapping(value = "/recipeModify/{recipeno}")
 	public String recipeModify(@PathVariable("recipeno") int recipeno, HttpSession session, Model model) {
 
@@ -327,6 +338,7 @@ public class RecipeController {
 
 		return "recipe/recipeList";
 	}
+
 
 }
 
