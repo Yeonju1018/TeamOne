@@ -35,37 +35,35 @@
 
 <div layout:fragment="content">
 
-    마이페이지
+    내가쓴글
 
-    <div>아이디
-        <input type="text" name="username" class="form-control" placeholder="입력값 없음 수정필요"
-               th:value="${#authentication.principal.username}" readonly>
-    </div>
-  <div> 이메일
-        <input type="text" name="useremail" class="form-control" placeholder="입력값 없음 수정필요"
-               th:value="${#authentication.principal.useremail}" readonly>
-    </div>
-<div> 사용자 이름
-        <input type="text" name="userfullname" class="form-control" placeholder="입력값 없음 수정필요"
-               th:value="${#authentication.principal.userfullname}" readonly>
-    </div>
-    <div> 닉네임
-        <input type="text" name="usernickname" class="form-control" placeholder="입력값 없음 수정필요"
-               th:value="${#authentication.principal.usernickname}" readonly>
-    </div>
-<div> 전화 번호
-        <input type="text" name="userphone" class="form-control" placeholder="입력값 없음 수정필요"
-               th:value="${#authentication.principal.userphone}" readonly>
-    </div>
-<div> 주소
-        <input type="text" name="useraddr" class="form-control" placeholder="입력값 없음 수정필요"
-               th:value="${#authentication.principal.useraddr}" readonly>
-    </div>
-    <form method="get" action="/member/membermodify">
-        <button type="submit">기본 회원정보 수정</button>
+    <th:block th:each="recipe : ${recipe}">
+        <ul class="common_sp_list_ul ea4" style="padding:0 0 0 8px;">
+            <li class="common_sp_list_li">
+                <div class="common_sp_thumb">
+                    <a th:href="@{'/recipe/recipeDetail/' + ${recipe.recipeno}}" class="common_sp_link">
+                        <span class="common_vod_label">
+                        </span>
+                        <img th:src="'/recipeImg/' + ${recipe.mainpicrename}">
+                    </a>
+                </div>
+                <div class="common_sp_caption">
+                    <div class="common_sp_caption_tit line2" th:text="${recipe.title}">제목</div>
+                    <div class="common_sp_caption_tit line2" th:text="${recipe.tag}">태그</div>
+                    <div class="common_sp_caption_rv_name" style="display: inline-block; vertical-align: bottom;">
+                        <a href="/profile/recipe.html?uid=plc0410">
+                            <img src="../img/food.jpg">
+                            <div class="common_sp_caption_tit line2" th:text="${recipe.writer}">작성자</div>
+                        </a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </th:block>
+
+    <form method="get" action="/member/mypage">
+        <button type="submit">마이페이지로 이동</button>
     </form>
-    <form method="get" action="/member/passwordmodify">
-        <button type="submit">비밀 번호 수정</button>
-    </form>
+
 
 </div>
