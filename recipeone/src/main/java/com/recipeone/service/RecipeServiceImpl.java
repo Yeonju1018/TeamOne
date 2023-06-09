@@ -1,15 +1,27 @@
 package com.recipeone.service;
 
-import com.recipeone.dto.ListRecipeDto;
-import com.recipeone.dto.RecipeFormDto;
-import com.recipeone.dto.RecipeIngredientDto;
 import com.recipeone.entity.Recipe;
-import com.recipeone.entity.RecipeImg;
 import com.recipeone.entity.RecipeIngredient;
 import com.recipeone.entity.RecipeStep;
-import com.recipeone.repository.RecipeImgRepository;
+
 import com.recipeone.repository.RecipeRepository;
-import com.recipeone.repository.RecipeStepRepository;
+import com.recipeone.repository.RecipeStore;
+import groovy.util.logging.Slf4j;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import com.recipeone.dto.ListRecipeDto;
+import com.recipeone.entity.Recipe;
+import com.recipeone.entity.RecipeIngredient;
+import com.recipeone.entity.RecipeStep;
+import com.recipeone.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -32,34 +44,32 @@ import org.springframework.web.multipart.MultipartFile;
 public class RecipeServiceImpl implements RecipeService {
     private final ModelMapper modelMapper;
     private final RecipeRepository recipeRepository;
-    private final RecipeImgService recipeImgService;
-    private final RecipeImgRepository recipeImgRepository;
-    private final RecipeStepRepository recipeStepRepository;
-    private final RecipeStepService recipeStepService;
-    private RecipeIngredientService recipeIngredientService;
+
+	@Autowired
+	private RecipeStore rStore;
+
+	@Autowired
+	private SqlSessionTemplate session;
 
     @Override
-    public List<Long> searched(String keyword) throws RecipeIdExistException {
+    public List<Integer> searched(String keyword) throws RecipeIdExistException {
         List<String> recommendedKeywords = recommendKeywords(keyword);
-        List<Long> recipeIds = recipeRepository.findRecipeIdByrecommendedKeywords(recommendedKeywords);
+        log.info("recommendedKeywords======" + recommendedKeywords);
+        List<Integer> recipeIds = recipeRepository.findRecipeIdByrecommendedKeywords(recommendedKeywords);
         if (recipeIds.isEmpty()) {
             throw new RecipeIdExistException();
         }
         return recipeIds;
     }
 
-    @Override
-    public List<Long> filterSearchedId(List<String> recommendedKeywords, String rctype, String rcsituation, String rcmeans, String rcingredient) throws RecipeIdExistException {
-      List<Long> recipeIds = recipeRepository.findRecipeIdByfilterSearched(recommendedKeywords,rctype,rcsituation,rcmeans,rcingredient);
-        return recipeIds;
-    }
 
     @Override
-    public List<Recipe> filterSearchedRecipe(List<String> recommendedKeywords, String rctype, String rcsituation, String rcmeans, String rcingredient,  Model model) throws RecipeExistException {
+    public List<Recipe> filterSearchedRecipe(List<String> recommendedKeywords, String rctype, String rcsituation, String rcmeans, String rcingredient, Model
+		model) throws RecipeExistException {
         List<Recipe> recipecont = recipeRepository.findRecipesByFilterSearched(recommendedKeywords,rctype,rcsituation,rcmeans,rcingredient);
         List<ListRecipeDto> listRecipeDtoList = new ArrayList<>();
         for (Recipe recipe : recipecont) {
-            ListRecipeDto listRecipeDto = new ListRecipeDto(recipe.getId(), recipe.getTitle(), recipe.getImgUrl(),recipe.getTag(),recipe.getWriter());
+            ListRecipeDto listRecipeDto = new ListRecipeDto(recipe.getRecipeno(), recipe.getTitle(), recipe.getMainpicrename(),recipe.getTag(),recipe.getWriter());
             listRecipeDtoList.add(listRecipeDto);
         }
         model.addAttribute("recipe", listRecipeDtoList);
@@ -70,8 +80,7 @@ public class RecipeServiceImpl implements RecipeService {
     public List<String> recommendKeywords(String keyword) throws RecipeIdExistException {
 
         List<String> titleList = recipeRepository.findtitlelist();
-//        List<String> taglist = recipeRepository.findtaglist();
-        List<String> taglist = new ArrayList<>(Arrays.asList("a", "b")); //레시피 등록할 때 태그 들어가면 삭제
+        List<String> taglist = recipeRepository.findtaglist();
         double similarityRatio = 0.5;
         log.info("titleList======" + titleList);
         log.info("taglist======" + taglist);
@@ -104,65 +113,123 @@ public class RecipeServiceImpl implements RecipeService {
         return recommendedKeywords;
     }
 
-    public Long saveRecipe(RecipeFormDto recipeFormDto, List<MultipartFile> recipeImgFileList) throws Exception {
+	@Override
+	public int registRecipe(Recipe recipe) {
+		int result = rStore.insertRecipe(recipe, session);
+		log.info("registRecipe result======" + result);
+		return result;
+	}
 
-        // 레시피 등록
-        Recipe recipe = recipeFormDto.createRecipe();
-        recipeRepository.save(recipe);
+	@Override
+	public int registStep(List<RecipeStep> rsList) {
+		int result = rStore.insertStep(rsList, session);
+		log.info("registStep result======" + result);
+		return result;
+	}
 
-        // 이미지 등록
-        for (int i = 0; i < recipeImgFileList.size(); i++) {
-            RecipeImg recipeImg = new RecipeImg();
-            recipeImg.setRecipe(recipe);
+	@Override
+	public int registIngredient(List<RecipeIngredient> rmList) {
+		int result = rStore.insertIngredient(rmList, session);
+		log.info("registIngredient result======" + result);
+		return result;
+	}
 
-            // 대표이미지 설정
-            if (i == 0) {
-                recipeImg.setRepimgYn("Y");
-            } else {
-                recipeImg.setRepimgYn("N");
-            }
-            recipeImgService.saveRecipeImg(recipeImg, recipeImgFileList.get(i));
-        }
+	@Override
+	public int checkRecommand(int recipeno, String memberEmail) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-        // 요리순서 등록
-        List<RecipeStep> recipeSteps = new ArrayList<>();
-        for (int j = 0; j < recipeImgFileList.size(); j++) {
-            RecipeStep recipeStep = new RecipeStep();
-            recipeStep.setRecipe(recipe);
-            recipeStep.setSteptext("왜 값이 안들어갈까" + j);
-            //Map<String, Object> steptext = new HashMap<String, Object>();
-            //steptext.put(recipeStep.getSteptext(), j);
+	@Override
+	public int allRecipeCommentList(int page, int limit, int recipeno) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-            recipeSteps.add(recipeStep);
-            //recipeStepService.saveRecipeStep(recipeStep);
-        }
-        recipeStepRepository.saveAll(recipeSteps);
+	@Override
+	public int modifyOneRecipe(Recipe recipe) {
+		int result = rStore.updateOneRecipe(session, recipe);
+		return result;
+	}
 
-        return recipe.getId();
-    }
+	@Override
+	public int modifyOneRecipeStep(List<RecipeStep> rsList) {
+		int result= rStore.updateOneRecipeStep(session, rsList);
+		return result;
+	}
 
-    public void addIngredientToRecipe(Long recipeId, RecipeIngredientDto recipeIngredientDto) {
-        Recipe recipe = getRecipeById(recipeId);
+	@Override
+	public int modifyOneRecipeIngredient(List<RecipeIngredient> rmList) {
+		int result = rStore.updateOneRecipeIngredient(session, rmList);
+		return result;
+	}
 
-        // RecipeIngredient 생성 및 설정
-        RecipeIngredient recipeIngredient = new RecipeIngredient();
-        recipeIngredient.createRecipeIngredient(recipeIngredientDto);
-        recipeIngredient.setRecipe(recipe);
+	@Override
+	public int removeOneRecipe(int recipeno) {
+		int result = rStore.deleteOneRecipe(session, recipeno);
+		return result;
+	}
 
-        // RecipeIngredient 저장
-        recipeIngredientService.saveRecipeIngredient(recipeIngredient);
+	@Override
+	public List<Recipe> printRecipeList(int currentPage, int limit) {
+		List<Recipe> rList = rStore.selectAllRecipe(currentPage, limit, session);
+		return rList;
+	}
 
-        // Recipe의 ingredients 리스트에 추가
-        recipe.getRecipeIngredients().add(recipeIngredient);
+	@Override
+	public Recipe printOneRecipe(int recipeno) {
+		Recipe recipe = rStore.selectOneRecipe(recipeno, session);
+		return recipe;
+	}
 
-        // Recipe 저장
-        recipeRepository.save(recipe);
+	@Override
+	public List<RecipeStep> printOneRecipeStep(int recipeno) {
+		List<RecipeStep>  rsList = rStore.selectOneRecipeDetail(recipeno, session);
+		return rsList;
+	}
 
-    }
+	@Override
+	public List<RecipeIngredient> printOneRecipeIngredient(int recipeno) {
+		List<RecipeIngredient> rmList = rStore.selectOneRecipeIngredient(recipeno, session);
+		return rmList;
+	}
 
-    public Recipe getRecipeById(Long recipeId) {
-        return recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new NoSuchElementException("Recipe with ID " + recipeId + " not found"));
-    }
+	@Override
+	public int removeOneImg(String picName) {
+		int result = rStore.deleteOneImg(session, picName);
+		return result;
+	}
+
+	@Override
+	public List<Recipe> recomadRecipe(String recipeCategory) {
+		return null;
+	}
+
+	@Override
+	public int getTotalCount(int recipeno) {
+		int count = rStore.selectTotalCount(session,recipeno);
+		return count;
+	}
+
+	@Override
+	public String printMemberName(String useremail) {
+		String name = rStore.selectMemberName(useremail, session);
+		return name;
+	}
+
+	@Override
+	public int checkMyRecipe(int recipeno, String useremail) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String getMemberEmail(int recipeno) {
+		String useremail = rStore.selectMemberEmail(session, recipeno);
+		return useremail;
+	}
 
 }
+
+
+

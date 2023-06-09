@@ -1,88 +1,59 @@
 package com.recipeone.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import com.recipeone.dto.RecipeFormDto;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter @Setter @ToString
 @Entity
-@Table(name = "recipe")
-public class Recipe extends BaseTimeEntity {
+@Getter @Setter @ToString
+public class Recipe {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id; // 레시피 아이디
-
-	private String writer; // 사용자 아이디
-	
-	//@GeneratedValue(strategy = GenerationType.AUTO)
-	//private Integer num; // 레시피 게시글 번호
-	
-	@Column(nullable = false, length = 50)
+	private int recipeno; // 레시피 아이디
 	private String title; // 레시피 제목
-	
-	@OneToMany(mappedBy = "recipe", cascade=CascadeType.PERSIST)
-	private List<RecipeStep> recipeSteps = new ArrayList<>(); // 레시피 내용(요리순서)
-	
 	private String cooktime; // 조리시간 (요리정보)
 	private String nop; // @인분 (요리정보)
-	//private String rc_thumbnail; // 썸네일 이미지
-	
-	@OneToMany(mappedBy = "recipe", cascade=CascadeType.PERSIST, orphanRemoval = true)
-	private List<RecipeIngredient> recipeIngredients = new ArrayList<>(); // 레시피 재료
+	private String mainpic; // 썸네일 이미지
+	private String mainpicrename; // 썸네일 이미지 업로드 날짜 이름
 	private String tag; // 태그
 	private String rctype; // 카테고리 종류별
 	private String rcsituation; // 카테고리 상황별
 	private String rcingredient; // 카테고리 재료별
 	private String rcmeans; // 카테고리 방법별
-	private String rcTheme; // 카테고리 테마별
-	private String rcDate; // 레시피 입력 날짜, 시간
-	private String rcCount; // 레시피 조회수
+	//private String rcTheme; // 카테고리 테마별
+	private Date insertdate; // 레시피 최초 입력 시간
+	private Date updatedate; // 레시피 업데이트 시간
+	private int rccount; // 레시피 조회수
+	private String recipestatus; // 레시피 삭제 여부
+	private String writer; // 사용자 닉네임
 
-	public void createRecipe(RecipeFormDto recipeFormDto) { 
-		this.title = recipeFormDto.getTitle(); 
-		this.cooktime = recipeFormDto.getCooktime(); 
-		this.nop = recipeFormDto.getNop();
-		//this.rc_thumbnail = recipeFormDto.getRc_thumbnail(); 
-		this.rctype = recipeFormDto.getRctype();
-		this.rcsituation = recipeFormDto.getRcsituation();
-		this.rcingredient = recipeFormDto.getRcingredient();
-		this.rcmeans = recipeFormDto.getRcmeans();
-		//this.recipeSteps = recipeFormDto.getRecipeSteps(); 
-		//this.recipeIngredients = recipeFormDto.getRecipeIngredients();
-	 }
-	public void addIngredient(RecipeIngredient ingredient) {
-		recipeIngredients.add(ingredient);
-		ingredient.setRecipe(this);
-    }
-
-    public void removeIngredient(RecipeIngredient ingredient) {
-    	recipeIngredients.remove(ingredient);
-        ingredient.setRecipe(null);
-    }
-
-	@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<RecipeImg> recipeImgs = new ArrayList<>();
-
-	public String getImgUrl() {
-		if (!recipeImgs.isEmpty()) {
-			return recipeImgs.get(0).getImgUrl();
-		}
-		return null;
+	public Recipe() {
 	}
 
+	public Recipe(int recipeno, String title, String cooktime, String nop, String mainpic,
+			String mainpicrename, String tag, String rctype, String rcsituation, String rcingredient,
+			String rcmeans, Date insertdate, Date updatedate, int rccount, String recipestatus, String writer) {
+		this.recipeno = recipeno;
+		//this.writer = writer;
+		this.title = title; 
+		this.cooktime =cooktime; 
+		this.nop = nop;
+		this.mainpic = mainpic;
+		this.mainpicrename = mainpicrename;
+		this.tag = tag;
+		this.rctype = rctype;
+		this.rcsituation = rcsituation;
+		this.rcingredient = rcingredient;
+		this.rcmeans = rcmeans;
+		this.insertdate = insertdate;
+		this.updatedate = updatedate;
+		this.rccount = rccount;
+		this.recipestatus = recipestatus;
+		this.writer = writer;
+	 }
 }
