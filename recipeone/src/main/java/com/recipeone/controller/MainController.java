@@ -27,10 +27,4 @@ public class MainController {
         return "main2";
     }
 
-    // 챗GPT가 랜더링하라고 했다.
-/*    @GetMapping("/recipeListPage")
-    public String recipeListPage() {
-        return "recipeList";
-    }*/
-
 }

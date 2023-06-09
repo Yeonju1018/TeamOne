@@ -1,5 +1,8 @@
 package com.recipeone.repository;
 import java.util.*;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,12 +25,13 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 
 //	진행중
 
-	@Query(value ="SELECT * FROM Recipe r " +
+	@Query(value ="SELECT r.* FROM Recipe r " +
 			"WHERE (r.title IN :recommendedKeywords OR r.tag IN :recommendedKeywords) " +
 			"AND (:rctype IS NULL OR r.rctype = :rctype) " +
 			"AND (:rcsituation IS NULL OR r.rcsituation = :rcsituation) " +
 			"AND (:rcmeans IS NULL OR r.rcmeans = :rcmeans) " +
-			"AND (:rcingredient IS NULL OR r.rcingredient = :rcingredient)", nativeQuery = true)
+			"AND (:rcingredient IS NULL OR r.rcingredient = :rcingredient)" +
+			"AND r.recipestatus = 'Y'", nativeQuery = true)
 	List<Recipe> findRecipesByFilterSearched(@Param("recommendedKeywords") List<String> recommendedKeywords,
 											 @Param("rctype") String rctype,
 											 @Param("rcsituation") String rcsituation,
@@ -45,7 +49,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 											   @Param("rcsituation") String rcsituation,
 											   @Param("rcmeans") String rcmeans,
 											   @Param("rcingredient") String rcingredient);
-
 
 }
 
