@@ -1,5 +1,6 @@
 package com.recipeone.service;
 
+import com.recipeone.dto.LoginCountDTO;
 import com.recipeone.dto.MemberJoinDTO;
 import com.recipeone.dto.MemberMofifyDTO;
 import com.recipeone.entity.Member;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import javax.servlet.http.HttpServletRequest;
 
 public interface MemberService {
+    void memberlog(LoginCountDTO loginCountDTO);
+
     static class MidExistException extends Exception{
     }
     static class UserNickNameExistException extends Exception{
