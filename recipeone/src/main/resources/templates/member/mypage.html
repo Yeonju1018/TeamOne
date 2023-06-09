@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout1}">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .carousel-inner > .item {
+            height: 350px;
+        }
+        .margin{
+            margin-bottom:30px;
+        }
+        .banner{
+            height: 300px;
+            position: absolute; top:0; left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .card-text{
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        a:hover{
+            text-decoration:none;
+        }
+        .center{
+            text-align:center;
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+
+    마이페이지
+
+    <div>아이디
+        <input type="text" name="username" class="form-control" placeholder="입력값 없음 수정필요"
+               th:value="${#authentication.principal.username}" readonly>
+    </div>
+  <div> 이메일
+        <input type="text" name="useremail" class="form-control" placeholder="입력값 없음 수정필요"
+               th:value="${#authentication.principal.useremail}" readonly>
+    </div>
+<div> 사용자 이름
+        <input type="text" name="userfullname" class="form-control" placeholder="입력값 없음 수정필요"
+               th:value="${#authentication.principal.userfullname}" readonly>
+    </div>
+    <div> 닉네임
+        <input type="text" name="usernickname" class="form-control" placeholder="입력값 없음 수정필요"
+               th:value="${#authentication.principal.usernickname}" readonly>
+    </div>
+    <div>레벨
+        <input type="text" name="userlev" class="form-control" 
+               th:value="${#authentication.principal.userlev}" readonly>
+    </div>
+<div> 전화 번호
+        <input type="text" name="userphone" class="form-control" placeholder="입력값 없음 수정필요"
+               th:value="${#authentication.principal.userphone}" readonly>
+    </div>
+<div> 주소
+        <input type="text" name="useraddr" class="form-control" placeholder="입력값 없음 수정필요"
+               th:value="${#authentication.principal.useraddr}" readonly>
+    </div>
+    <div> 출생년도
+        <input type="text" name="useryear" class="form-control" placeholder="입력값 없음 수정필요"
+               th:value="${#authentication.principal.useryear}" readonly>
+    </div>
+    <div> 성별
+        <input type="text" name="usergender" class="form-control" placeholder="입력값 없음 수정필요"
+               th:value="${#authentication.principal.usergender}" readonly>
+    </div>
+    <form method="get" action="/member/membermodify">
+        <button type="submit">기본 회원정보 수정</button>
+    </form>
+    <form method="get" action="/member/passwordmodify">
+        <button type="submit">비밀 번호 수정</button>
+    </form>
+    <form method="get" action="/member/myregist">
+        <input type="hidden" name="usernickname" th:value="${#authentication.principal.usernickname}">
+        <button type="submit">내가 쓴 글 보기</button>
+    </form>
+
+
+</div>
