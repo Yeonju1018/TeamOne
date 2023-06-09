@@ -4,11 +4,13 @@ import com.recipeone.dto.MemberJoinDTO;
 import com.recipeone.dto.MemberMofifyDTO;
 import com.recipeone.entity.Member;
 import com.recipeone.entity.MemberRole;
+import com.recipeone.entity.Recipe;
 import com.recipeone.repository.MemberRepository;
 import com.recipeone.security.dto.MemberSecurityDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -144,4 +147,5 @@ public class MemberServiceImpl implements MemberService {
     public boolean checkDuplicatedUsernickname(String usernickname) {
         return memberRepository.findByUserNickName(usernickname).isPresent();
     }
+
 }

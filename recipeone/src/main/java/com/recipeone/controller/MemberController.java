@@ -3,6 +3,7 @@ package com.recipeone.controller;
 import com.recipeone.dto.MemberJoinDTO;
 import com.recipeone.dto.MemberMofifyDTO;
 import com.recipeone.entity.Member;
+import com.recipeone.entity.Recipe;
 import com.recipeone.repository.MemberRepository;
 import com.recipeone.security.dto.MemberSecurityDTO;
 import com.recipeone.service.MemberService;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -37,7 +40,6 @@ public class MemberController {
     public void loginGET(String error, String logout) {
         log.info("login get...........");
         log.info("log out:" + logout);
-
         if (logout != null) {
             log.info("user logout.........");
         }
