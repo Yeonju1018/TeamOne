@@ -146,10 +146,6 @@ public class RecipeController {
                     "");
             // 배열의 마지막은 ,가 안들어가기때문에 더미vlaue 배열값으로 인식한다, ,가 없는 더미value를 삭제 해주는 코드
             // 레시피 순서 사진 저장코드
-
-
-
-
             int countStep = 1;
             for (int i = 0; i < arrDescription.length; i++) {
                 String recipePic = recipePicture.get(i).getOriginalFilename();
@@ -189,7 +185,31 @@ public class RecipeController {
             log.error("레시피 저장 중 오류 발생", e);
             return "error";
         }
+		//        4차병합 게시글 수에 따라 유저 레벨 상승
+		int count  = recipeRepository.countByUserNickname(recipe.getWriter());
+		int[] levelRanges = {2, 6, 16, 51};
+		Integer userlev = 1;
 
+		for (int i = 0; i < levelRanges.length; i++) {
+			if (count >= levelRanges[i]) {
+				userlev = i + 2;
+			} else {
+				break;
+			}
+		}
+		memberRepository.updateuserlev(userlev, recipe.getWriter());
+		// memberSecurityDTO 업데이트
+		MemberSecurityDTO memberSecurityDTO = (MemberSecurityDTO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		memberSecurityDTO.setUserlev(userlev);
+		// Authentication 객체 업데이트
+		Authentication newAuthentication = new UsernamePasswordAuthenticationToken(memberSecurityDTO, memberSecurityDTO.getPassword(), memberSecurityDTO.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+		//memberlog 업데이트
+		memberLogRepository.updateMemberLoginLoglev(userlev,recipe.getWriter());
+
+
+		return "redirect:/";
+	}
 	// 3차병합때 수정한 부분
 	@GetMapping(value = "/recipeList")
 	public String recipeList(HttpSession session, Model model,
@@ -270,11 +290,6 @@ public class RecipeController {
 		return "redirect:/recipe/recipeList";
 	}
 
-//
-//    @PreAuthorize("principal.username==#boardDTO.writer") //작성자와 동일한 user만 수정 페이지 가능
-//    @GetMapping("/modify")
-//    public void modify() {
-//    }
 
 // 3차병합때 수정한 부분
 
