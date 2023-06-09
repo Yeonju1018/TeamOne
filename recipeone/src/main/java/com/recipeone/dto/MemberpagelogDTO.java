@@ -1,22 +1,25 @@
 package com.recipeone.dto;
 
 import lombok.Data;
+
 //로그 기록 유의미하게 저장하는건 진행중
 @Data
-public class LoginCountDTO {
+public class MemberpagelogDTO {
+    private Long no;
     private String mid;
-    private Integer loginCount;
-    private String usergender;
+    private String page;
+    private String duration;
+    private Integer userlev;
     private String useryear;
-    private Long userlev;
+    private String usergender;
 
-    public LoginCountDTO(String mid, Integer loginCount, String usergender, String useryear, Long userlev) {
+    public MemberpagelogDTO(Long no,String mid, String page, String duration,Integer userlev, String useryear,String usergender) {
+        this.no = no;
         this.mid = mid;
-        this.loginCount = loginCount;
-        this.usergender = usergender;
-        this.useryear = useryear;
+        this.page = page;
+        this.duration = duration;
         this.userlev = userlev;
+        this.useryear = useryear;
+        this.usergender = usergender;
     }
-
-    // getter 메소드
 }

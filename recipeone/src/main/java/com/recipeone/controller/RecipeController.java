@@ -92,39 +92,33 @@ public class RecipeController {
                              Model model, HttpSession session, HttpServletRequest request) {
         try {
             // 레시피 전달
-
-			// 대표사진 저장코드
-			String mainPic = mainPicture.getOriginalFilename();
-
-			if (!mainPic.isEmpty()) {
-				String mainPicRename = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis())) + "."
-						+ mainPic.substring(mainPic.lastIndexOf(".") + 1);
-				// 파일 저장 경로
-				String fileUrl = "D:/choonsik/workspace/bootspring/recipeone/src/main/resources/static/recipeImg/";
-
-				File file = new File(fileUrl);
-				if (!file.exists()) {
-					// 경로에 폴더가 없으면 폴더 생성
-					file.mkdirs();
-				}
-
-				try {
-					// 파일 저장
-					mainPicture.transferTo(new File(fileUrl + mainPicRename));
-					recipe.setMainpic(mainPic);
-					recipe.setMainpicrename(mainPicRename);
-					model.addAttribute("mainPic", mainPicRename);
-				} catch (Exception e) {
-					log.error("레시피 메인사진 중 오류 발생", e);
-					return "error";
-				}
-			}
-
-			log.info(">>>mainPic는======" + mainPic);
-
-			recipeService.registRecipe(recipe);
-			//model.addAttribute("mainPic", mainPic);
-
+            // 대표사진 저장코드
+            String mainPic = mainPicture.getOriginalFilename();
+            if (!mainPic.isEmpty()) {
+                String mainPicRename = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis())) + "."
+                        + mainPic.substring(mainPic.lastIndexOf(".") + 1);
+                // 파일 저장 경로
+//                String fileUrl = "D:/choonsik/workspace/bootspring/recipeone/src/main/resources/static/recipeImg/";
+                String fileUrl = "D:\\ChoHyeongChan\\workspace\\teamOne\\recipeone\\src\\main\\resources\\static\\recipeImg\\";
+                File file = new File(fileUrl);
+                if (!file.exists()) {
+                    // 경로에 폴더가 없으면 폴더 생성
+                    file.mkdirs();
+                }
+                try {
+                    // 파일 저장
+                    mainPicture.transferTo(new File(fileUrl + mainPicRename));
+                    recipe.setMainpic(mainPic);
+                    recipe.setMainpicrename(mainPicRename);
+                    model.addAttribute("mainPic", mainPicRename);
+                } catch (Exception e) {
+                    log.error("레시피 메인사진 중 오류 발생", e);
+                    return "error";
+                }
+            }
+            log.info(">>>mainPic는======" + mainPic);
+            recipeService.registRecipe(recipe);
+            //model.addAttribute("mainPic", mainPic);
             // 레시피 재료 리스트 만들어서 전달하기
             ArrayList<RecipeIngredient> rmList = new ArrayList<RecipeIngredient>();
             String amount[] = rIngredient.getAmount().split(",");
@@ -143,7 +137,6 @@ public class RecipeController {
             log.info(">>>재료List는======" + rmList);
             recipeService.registIngredient(rmList);
             model.addAttribute("recipeIngredient", rmList);
-
             // 레시피 순서 리스트 만들어서 전달하기
             ArrayList<RecipeStep> rsList = new ArrayList<RecipeStep>();
             recipeStep.getRecipedescription();
@@ -152,56 +145,50 @@ public class RecipeController {
             arrDescription[arrDescription.length - 1] = arrDescription[arrDescription.length - 1].replace(",ab22bb",
                     "");
             // 배열의 마지막은 ,가 안들어가기때문에 더미vlaue 배열값으로 인식한다, ,가 없는 더미value를 삭제 해주는 코드
+            // 레시피 순서 사진 저장코드
 
-			// 레시피 순서 사진 저장코드
-			int countStep = 1;
-			for (int i = 0; i < arrDescription.length; i++) {
-				String recipePic = recipePicture.get(i).getOriginalFilename();
-				String recipePicRename = "";
 
-				if (!recipePic.isEmpty()) {
-					recipePicRename = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis()))
-							+ "stepImg" + i + "." + recipePic.substring(recipePic.lastIndexOf(".") + 1);
 
-					// 파일 저장 경로
-					String fileUrl = "D:/choonsik/workspace/bootspring/recipeone/src/main/resources/static/recipeImg/";
 
-					File file = new File(fileUrl);
-					if (!file.exists()) {
-						// 경로에 폴더가 없으면 폴더 생성
-						file.mkdirs();
-					}
-
-					try {
-						// 파일 저장
-						recipePicture.get(i).transferTo(new File(fileUrl + recipePicRename));
-					} catch (Exception e) {
-						log.error("레시피 순서 사진 중 오류 발생", e);
-						return "error";
-					}
-				}
-
-				// 여기서부터 레시피 step 테이블에 저장할 값 List화 시키는 코드
-				RecipeStep rStepOne = new RecipeStep();
-
+            int countStep = 1;
+            for (int i = 0; i < arrDescription.length; i++) {
+                String recipePic = recipePicture.get(i).getOriginalFilename();
+                String recipePicRename = "";
+                if (!recipePic.isEmpty()) {
+                    recipePicRename = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis()))
+                            + "stepImg" + i + "." + recipePic.substring(recipePic.lastIndexOf(".") + 1);
+                    // 파일 저장 경로
+//                    String fileUrl = "D:/choonsik/workspace/bootspring/recipeone/src/main/resources/static/recipeImg/";
+                    String fileUrl = "D:\\ChoHyeongChan\\workspace\\teamOne\\recipeone\\src\\main\\resources\\static\\recipeImg\\";
+                    File file = new File(fileUrl);
+                    if (!file.exists()) {
+                        // 경로에 폴더가 없으면 폴더 생성
+                        file.mkdirs();
+                    }
+                    try {
+                        // 파일 저장
+                        recipePicture.get(i).transferTo(new File(fileUrl + recipePicRename));
+                    } catch (Exception e) {
+                        log.error("레시피 순서 사진 중 오류 발생", e);
+                        return "error";
+                    }
+                }
+                // 여기서부터 레시피 step 테이블에 저장할 값 List화 시키는 코드
+                RecipeStep rStepOne = new RecipeStep();
                 rStepOne.setRecipedescription(arrDescription[i]);
-
                 rStepOne.setRecipeorder(countStep++);
                 rStepOne.setRecipepic(recipePic);
                 rStepOne.setRecipepicrename(recipePicRename);
-
-				rsList.add(rStepOne);
-				log.info(">>>rStepOne은======" + rStepOne);
-			}
-			log.info(">>>순서List는======" + rsList);
-			recipeService.registStep(rsList); // 레시피 순서저장 코드 종료
-			model.addAttribute("recipeStep", rsList);
-		} catch (Exception e) {
-			log.error("레시피 저장 중 오류 발생", e);
-			return "error";
-		}
-		return "redirect:/";
-	}
+                rsList.add(rStepOne);
+                log.info(">>>rStepOne은======" + rStepOne);
+            }
+            log.info(">>>순서List는======" + rsList);
+            recipeService.registStep(rsList); // 레시피 순서저장 코드 종료
+            model.addAttribute("recipeStep", rsList);
+        } catch (Exception e) {
+            log.error("레시피 저장 중 오류 발생", e);
+            return "error";
+        }
 
 	// 3차병합때 수정한 부분
 	@GetMapping(value = "/recipeList")

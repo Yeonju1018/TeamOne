@@ -12,26 +12,27 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Table(name = "MEMBERLOGINLOG")
+@Table(name = "MEMBERPAGELOG")
 @SequenceGenerator(
-        name = "MEMBERLOGINLOG_SEQ_GENERATOR",
-        sequenceName = "MEMBERLOGINLOG_SEQ",
+        name = "MEMBERPAGELOG_SEQ_GENERATOR",
+        sequenceName = "MEMBERPAGELOG_SEQ",
         initialValue = 1,
         allocationSize = 1
 )
 
-public class MemberLoginlog {
+public class Memberpagelog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,
-            generator = "MEMBERLOGINLOG_SEQ_GENERATOR")
-    @Column(name = "id")
-    private Long id;
+            generator = "MEMBERPAGELOG_SEQ_GENERATOR")
+    @Column(name = "no")
+    private Long no;
     private String mid;
-    private String useryear;
-    private String usergender;
+    private String page;
+    private String duration;
     private Integer userlev;
-    private LocalDateTime loginlog;
+    private String userage;
+    private String usergender;
 
 
 
