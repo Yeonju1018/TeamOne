@@ -26,6 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -205,7 +206,7 @@ public class MemberController {
         List<Recipe> recipeList = recipeRepository.findRecipeByUserNickname(usernickname);
         List<ListRecipeDto> listRecipeDtoList = new ArrayList<>();
         for (Recipe recipe : recipeList) {
-            ListRecipeDto listRecipeDto = new ListRecipeDto(recipe.getRecipeno(), recipe.getTitle(), recipe.getMainpicrename(), recipe.getTag(), recipe.getWriter());
+            ListRecipeDto listRecipeDto = new ListRecipeDto(recipe.getRecipeno(), recipe.getTitle(), recipe.getMainpicrename(), recipe.getTag(), recipe.getWriter(),recipe.getRecipestatus());
             listRecipeDtoList.add(listRecipeDto);
         }
         model.addAttribute("recipe", listRecipeDtoList);

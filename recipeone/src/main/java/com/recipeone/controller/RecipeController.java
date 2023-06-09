@@ -299,10 +299,15 @@ public class RecipeController {
 								 @RequestParam(value = "rcingredient", required = false) String rcingredient,
 								 @RequestParam(value = "rcmeans", required = false) String rcmeans, HttpSession session, RedirectAttributes redirectAttributes) {
 
-		if (rcmeans != null) {
-			session.setAttribute("rcmeans", rcmeans);
+		if (rctype != null) {
+			session.setAttribute("rctype", rctype);
 		} else {
-			rcmeans = (String) session.getAttribute("rcmeans");
+			rctype = (String) session.getAttribute("rctype");
+		}
+		if (rcsituation != null) {
+			session.setAttribute("rcsituation", rcsituation);
+		} else {
+			rcsituation = (String) session.getAttribute("rcsituation");
 		}
 		if (rcingredient != null) {
 			session.setAttribute("rcingredient", rcingredient);
@@ -408,7 +413,9 @@ public class RecipeController {
 
 			if (mainPicture != null && !mainPic.isEmpty()) {
 				// 기존 파일 삭제
-				String fileUrl = "D:/choonsik/workspace/bootspring/recipeone/src/main/resources/static/recipeImg/";
+//				String fileUrl = "D:/choonsik/workspace/bootspring/recipeone/src/main/resources/static/recipeImg/";
+				String fileUrl = "D:\\ChoHyeongChan\\workspace\\teamOne\\recipeone\\src\\main\\resources\\static\\recipeImg\\";
+
 				File existingFile = new File(fileUrl + recipe.getMainpicrename());
 				if (existingFile.exists()) {
 					existingFile.delete();
@@ -469,7 +476,8 @@ public class RecipeController {
 							+ "stepImgRe" + i + "." + recipePic.substring(recipePic.lastIndexOf(".") + 1);
 
 					// 파일 저장 경로
-					String fileUrl = "D:/choonsik/workspace/bootspring/recipeone/src/main/resources/static/recipeImg/";
+//					String fileUrl = "D:/choonsik/workspace/bootspring/recipeone/src/main/resources/static/recipeImg/";
+					String fileUrl = "D:\\ChoHyeongChan\\workspace\\teamOne\\recipeone\\src\\main\\resources\\static\\recipeImg\\";
 
 					File file = new File(fileUrl);
 					if (!file.exists()) {
