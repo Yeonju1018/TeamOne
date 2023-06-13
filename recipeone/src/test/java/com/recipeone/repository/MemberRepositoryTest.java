@@ -25,9 +25,9 @@ class MemberRepositoryTest {
     @Test
     @Commit
     public void insertMembers() {
-        String email = "wjstktpghd2@naver.com";
-        String password = "156321Qaz!";
-        String nickname = "조형찬";
+        String email = "juu1018w@gmail.com";
+        String password = "Qwert12345!";
+        String nickname = "이춘장";
 
         Member member = Member.builder()
                 .mid(email)
@@ -37,6 +37,7 @@ class MemberRepositoryTest {
 
         member.addRole(MemberRole.USER);
         member.setUsernickname(nickname);
+        member.addlev(2);
 
         // ADMIN 권한 부여
         member.addRole(MemberRole.ADMIN);

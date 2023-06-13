@@ -38,8 +38,6 @@ public class MvcConfiguration implements WebMvcConfigurer {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		// TODO Auto-generated method stub
-		registry.addResourceHandler("/static/recipeImg/**").addResourceLocations("D:\\choonsik\\workspace\\bootspring\\230530_병합_recipeone\\src\\main\\resources\\recipeImg\\");
-						/*.
-				addResourceLocations(uploadPath);*/
+		registry.addResourceHandler("/images/**").addResourceLocations(uploadPath);
 	}
 }

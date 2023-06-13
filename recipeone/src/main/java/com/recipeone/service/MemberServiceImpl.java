@@ -1,12 +1,13 @@
 package com.recipeone.service;
 
-import com.recipeone.dto.LoginCountDTO;
+//import com.recipeone.dto.LoginCountDTO;
 import com.recipeone.dto.MemberJoinDTO;
 import com.recipeone.dto.MemberMofifyDTO;
 import com.recipeone.entity.Member;
 import com.recipeone.entity.MemberLoginlog;
 import com.recipeone.entity.MemberRole;
 import com.recipeone.entity.Recipe;
+import com.recipeone.repository.MemberLogRepository;
 import com.recipeone.repository.MemberRepository;
 import com.recipeone.repository.RecipeRepository;
 import com.recipeone.security.dto.MemberSecurityDTO;
