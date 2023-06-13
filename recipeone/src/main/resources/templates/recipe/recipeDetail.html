@@ -45,13 +45,13 @@
 
     <th:block th:each="recipe : ${recipe}">
     <div th:with="user=${#authentication.principal}">
-        <article id="recipe-button" th:if="${#request.isUserInRole('ROLE_USER') and #authentication.principal.usernickname.equals(recipe.writer)}">
+        <article id="recipe-button" >
             <div class="col-md-12 row ">
                 <div class="col-md-6">
-                    <a th:href="@{'/recipe/recipeModify/' + ${recipe.recipeno}}">
+                    <a th:href="@{'/recipe/recipeModify/' + ${recipe.recipeno}}" th:if="${#request.isUserInRole('ROLE_USER') and #authentication.principal.usernickname.equals(recipe.writer)}">
                         <button class="button btn btn-outline-primary" type="submit" th:text="수정">modify</button>
                     </a>
-                    <a th:href="@{'/recipe/recipeDelete/' + ${recipe.recipeno}}">
+                    <a th:href="@{'/recipe/recipeDelete/' + ${recipe.recipeno}}" th:if="${#request.isUserInRole('ROLE_USER') and #authentication.principal.usernickname.equals(recipe.writer)}">
                         <button class="button btn btn-outline-primary" type="submit" th:text="삭제">Delete</button>
                     </a>
                     <a th:href="@{'/recipe/recipeList?currentPage=' + ${currentPage}}">
