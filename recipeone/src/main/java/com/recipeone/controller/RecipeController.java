@@ -211,7 +211,6 @@ public class RecipeController {
 
 		return "redirect:/";
 	}
-
 	// 3차병합때 수정한 부분
 	@GetMapping(value = "/recipeList")
 	public String recipeList(HttpSession session, Model model,
