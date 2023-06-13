@@ -36,10 +36,4 @@ public interface MemberLogRepository extends JpaRepository<MemberLoginlog,Long> 
   List<MemberLoginlog> findAllMemberLoginLogs();
 
 
-//  @Query(value = "SELECT m.mid, COUNT(DISTINCT m.mid) AS loginCount, m.usergender, m.useryear, m.userlev " +
-//          "FROM MemberLoginlog m " +
-//          "WHERE m.loginlog BETWEEN :startDate AND :endDate " +
-//          "GROUP BY m.mid, m.usergender, m.useryear, m.userlev " +
-//          "ORDER BY loginCount DESC", nativeQuery = true)
-//  List<Object[]> findLoginCountsByPeriod(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 }

@@ -175,8 +175,6 @@
             <div class="input-group">
                 <div class="recipeDetail container-md row" id="article2-area" >
                     <th:block  th:each="rStep : ${rsList}">
-                        <!--<div th:text="${rStep}"></div>-->
-
                     <!-- 요리순서 반복 시작-->
                     <div id="REdetail"  class="REdetailC row">
                         <!-- 레시피 설명역역 -->
@@ -196,10 +194,6 @@
                         <div class="row col-md-6 p-2">
                             <div class="col-md-5 container-md align-items-center m-0">
                                 <div class="row col-md-4  align-items-center check svgBtn">
-<!--                                    <svg class="delButton" width="40" height="40" onclick="PicDel(this, '${rStep.recipepicrename}', ${recipe.recipeno})">
-                                        <circle cx="20" cy="20" r="10" stroke="yellowgreen" stroke-width="4" fill="yellowgreen" />
-                                        <text x="50%" y="50%" style="font-size: 15px;" dominant-baseline="middle" text-anchor="middle">X</text>
-                                    </svg>-->
                                     <label class="input-file-button float-start">
                                         <img class="detailImg mx-auto" width="400px" height="270px"
                                              style="background-color: gray; border-radius: 10px; margin-top: 24px;"
@@ -231,7 +225,6 @@
 
             <h3 class="subheading">카테고리</h3>
             <div class="input-group">
-                <!--<div th:text="${recipe.rctype}"></div>-->
                 <select name="rctype" id="rctype">
                     <option value="" >종류별</option>
                     <option value="56" th:selected="${recipe.rctype} == 56">메인반찬</option>
@@ -336,7 +329,6 @@
 
             <h3 class="subheading">재료</h3>
 
-                <!--<div th:text="${rmList}"></div>-->
             <div class="input-group">
                 <div class="container-md align-items-center" >
                     <th:block th:each="rmList : ${rmList}">

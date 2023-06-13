@@ -268,12 +268,9 @@ public class RecipeController {
 		model.addAttribute("totalPage", totalPage);
 		model.addAttribute("blockStart", blockStart);
 		model.addAttribute("blockEnd", blockEnd);
-		//model.addAttribute("sort", sort);
 
 		return "recipe/recipeList";
 	}
-
-// 3차병합때 수정한 부분
 
 	@PostMapping("/recipeList")
 	public String recipelistPOST(@RequestParam(value = "keyword", required = false) String keyword, RedirectAttributes redirectAttributes, HttpSession session) {
@@ -299,9 +296,6 @@ public class RecipeController {
 		}
 		return "redirect:/recipe/recipeList";
 	}
-
-
-// 3차병합때 수정한 부분
 
 	@PostMapping("/sendData")
 	public String handleFormData(@RequestParam(value = "rctype", required = false) String rctype,
