@@ -33,11 +33,11 @@ public class RecipeRepositoryTest {
 		String[] categoryIngredients = {"70", "71", "72", "23", "28", "24", "50", "33", "47", "32", "25", "31", "48", "27", "26", "34"};
 		String[] categoryMethods = {"6", "1", "7", "36", "41", "42", "8", "10", "9", "38", "67", "39", "37", "11"};
 
-		for (int i = 1; i <= 121; i++) {
-			Recipe recipe = new Recipe();
-			recipe.setRecipeno(i);
-//			recipe.setWriter("User " + random.nextInt(10));
-			recipe.setWriter("이춘장");
+//		for (int i = 1; i <= 121; i++) {
+//			Recipe recipe = new Recipe();
+//			recipe.setRecipeno(i);
+////			recipe.setWriter("User " + random.nextInt(10));
+//			recipe.setWriter("이춘장");
 		for (int i = 1; i <= 7; i++) {
 			Recipe recipe = new Recipe();
 			recipe.setRecipeno(i);
