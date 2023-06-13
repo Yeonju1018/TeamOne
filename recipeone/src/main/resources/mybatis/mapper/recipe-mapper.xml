@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.recipeone.repository.RecipeStore">
+
+	<insert id="insertRecipe">
+		<![CDATA[
+        INSERT INTO recipe (RECIPENO,title,cooktime,nop,RCCOUNT,MAINPIC,MAINPICRENAME,
+        					tag,rctype,rcsituation,rcingredient,rcmeans,recipestatus,insertdate, updatedate, writer, mainpicurl)
+        VALUES (recipe_seq.nextval, #{title}, #{cooktime}, #{nop}, 0, #{mainpic}, #{mainpicrename},
+				#{tag}, #{rctype}, #{rcsituation}, #{rcingredient}, #{rcmeans}, 'Y', sysdate, sysdate, #{writer}, #{mainpicurl})
+		]]>
+	</insert>
+
+	<insert id="insertRecipeIngredient">
+		<![CDATA[
+        INSERT INTO recipe_ingredient (INGREDIENTORDER, recipeno, INGREDIENT, AMOUNT)
+        VALUES (#{ingredientorder}, recipe_seq.currval, #{ingredient}, #{amount})
+        ]]>
+	</insert>
+
+	<insert id="insertRecipeStep">
+		<![CDATA[
+        INSERT INTO recipe_step (RECIPEORDER, recipeno, recipedescription, recipepic, recipepicrename, recipepicurl)
+        VALUES (#{recipeorder}, recipe_seq.currval, #{recipedescription}, #{recipepic}, #{recipepicrename}, #{recipepicurl})
+        ]]>
+	</insert>
+
+	<insert id="insertRecipeIngredientPlus">
+		<![CDATA[
+        INSERT INTO recipe_ingredient (INGREDIENTORDER, RECIPENO, INGREDIENT, AMOUNT)
+        VALUES (#{ingredientorder}, #{recipeno}, #{ingredient}, #{amount})
+        ]]>
+	</insert>
+
+	<insert id="insertRstepPlus">
+		<![CDATA[
+        INSERT INTO recipe_step (RECIPEORDER, recipeno, RECIPEDESCRIPTION, recipepic, recipepicrename, recipepicurl)
+        VALUES (#{recipeorder}, #{recipeno}, #{recipedescription}, #{recipepic}, #{recipepicrename}, #{recipepicurl})
+        ]]>
+	</insert>
+
+	<update id="deleteOneImg">
+		<![CDATA[
+        UPDATE recipe_step
+        SET RECIPEPIC = NULL, RECIPEPICRENAME = NULL, RECIPEPICURL= NULL
+        WHERE RECIPEPICRENAME = #{picName}
+        ]]>
+	</update>
+
+	<update id="deleteRecipe">
+		<![CDATA[
+        UPDATE recipe
+        SET RECIPESTATUS = 'N'
+        WHERE RECIPENO = #{recipeno}
+        ]]>
+	</update>
+
+	<update id = "updateOneRecipe">
+		<![CDATA[
+		update recipe set TITLE = #{title}, MAINPIC = #{mainpic}, NOP = #{nop},
+		MAINPICRENAME = #{mainpicrename}, COOKTIME = #{cooktime}, UPDATEDATE = sysdate,
+		TAG = #{tag}, RCTYPE = #{rctype}, RCSITUATION = #{rcsituation}, RCINGREDIENT = #{rcingredient}, RCMEANS = #{rcmeans},
+		MAINPICURL = #{mainpicurl}
+		where RECIPENO = #{recipeno}
+		]]>
+	</update>
+
+	<update id = "updateOneStep">
+		<![CDATA[
+		update recipe_step set RECIPEDESCRIPTION = #{recipedescription}, recipepic = #{recipepic},
+				RECIPEPICRENAME= #{recipepicrename}, RECIPEPICURL = #{recipepicurl}
+		where RECIPENO = #{recipeno} and RECIPEORDER = #{recipeorder}
+		]]>
+	</update>
+
+	<update id = "updateOneIngredient">
+		<![CDATA[
+		update recipe_Ingredient set INGREDIENT = #{ingredient}, AMOUNT = #{amount}
+		where RECIPENO = #{recipeno} and INGREDIENTORDER = #{ingredientorder}
+		]]>
+	</update>
+
+	<update id="countPlus">
+		<![CDATA[
+		update recipe set RCCOUNT = RCCOUNT+1 where RECIPENO = #{recipeno}
+		]]>
+	</update>
+
+	<delete id="deleteOneIngredient">
+		<![CDATA[
+		delete from recipe_ingredient where RECIPENO = #{recipeno} and INGREDIENTORDER = #{ingredientorder}
+		]]>
+	</delete>
+
+	<!-- resultMap 예시 -->
+    <resultMap type="com.recipeone.entity.Recipe" id="recipeResultMap">
+        <id property="recipeno" column="RECIPENO"/>
+        <result property="title" column="TITLE"/>
+        <result property="cooktime" column="COOKTIME"/>
+        <result property="nop" column="NOP"/>
+        <result property="mainpic" column="MAINPIC"/>
+        <result property="mainpicrename" column="MAINPICRENAME"/>
+        <result property="tag" column="TAG"/>
+        <result property="rctype" column="RCTYPE"/>
+        <result property="rcsituation" column="RCSITUATION"/>
+        <result property="rcingredient" column="RCINGREDIENT"/>
+        <result property="rcmeans" column="RCMEANS"/>
+        <result property="insertdate" column="INSERTDATE"/>
+		<result property="updatedate" column="UPDATEDATE"/>
+        <result property="rccount" column="RCCOUNT"/>
+		<result property="recipestatus" column="RECIPESTATUS"/>
+		<result property="writer" column="WRITER"/>
+    </resultMap>
+
+<!--	<select id="selectAllRecipe" resultMap="recipeResultMap">
+		<![CDATA[
+		select * from recipe WHERE RECIPESTATUS = 'Y'
+		]]>
+	</select>-->
+
+	<select id="selectAllRecipe" resultMap="recipeResultMap" parameterType="com.recipeone.entity.Pagination">
+		<![CDATA[
+			SELECT recipeno, title, mainpicrename, tag, writer, recipestatus
+			FROM (
+				SELECT rownum rn, recipeno, title, mainpicrename, tag, writer, recipestatus
+				FROM (
+					SELECT recipeno, title, mainpicrename, tag, writer, recipestatus
+					FROM recipe
+					WHERE recipestatus = 'Y'
+					ORDER BY recipeno DESC
+				)
+				WHERE rownum <= #{limit}
+			)
+			WHERE rn >= #{startIndex}
+		]]>
+	</select>
+
+	<select id="selectOneRecipe" resultMap="recipeResultMap">
+		<![CDATA[
+		select * from recipe where RECIPENO = #{recipeno} and RECIPESTATUS = 'Y'
+		]]>
+	</select>
+
+	<select id="selectMember" resultType="string">
+		select USERNICKNAME from recipe where RECIPENO = #{recipeno}
+	</select>
+
+	<resultMap type="com.recipeone.entity.RecipeIngredient" id="RecipeIngredientResultMap">
+		<id property="recipeno"				column="RECIPENO" />
+		<result property="ingredientorder" 	column="INGREDIENTORDER" />
+		<result property="ingredient" 		column="INGREDIENT" />
+		<result property="amount" 			column="AMOUNT" />
+	</resultMap>
+
+	<select id="selectOneRIngredient" resultMap="RecipeIngredientResultMap">
+		<![CDATA[
+		select * from recipe_Ingredient where RECIPENO = #{recipeno} order by INGREDIENTORDER
+		]]>
+	</select>
+
+	<select id="countIngredient" resultType="_int">
+		<![CDATA[
+		select count(*) from recipe_Ingredient where RECIPENO = #{recipeno}
+		]]>
+	</select>
+
+	<resultMap type="com.recipeone.entity.RecipeStep" id="RecipeStepResultMap">
+		<id property="recipeno" 				column="RECIPENO" />
+		<result property="recipeorder" 			column="RECIPEORDER" />
+		<result property="recipedescription"	column="RECIPEDESCRIPTION" />
+		<result property="recipepic" 			column="RECIPEPIC" />
+		<result property="recipepicrename"		column="RECIPEPICRENAME" />
+	</resultMap>
+
+	<select id="selectOneRStep" resultMap="RecipeStepResultMap">
+		<![CDATA[
+		select * from recipe_Step where RECIPENO = #{recipeno} order by RECIPEORDER
+		]]>
+	</select>
+
+	<select id="totalRecord" resultType="int">
+		<![CDATA[
+			SELECT COUNT(*) FROM recipe WHERE RECIPESTATUS = 'Y'
+    	]]>
+	</select>
+
+</mapper>
