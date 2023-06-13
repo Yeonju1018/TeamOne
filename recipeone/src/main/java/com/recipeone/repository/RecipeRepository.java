@@ -25,8 +25,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 	@Query(value ="select r.id from Recipe r where r.title IN :recommendedKeywords or r.tag IN :recommendedKeywords", nativeQuery = true)
 	List<Integer> findRecipeIdByrecommendedKeywords(@Param("recommendedKeywords") List<String> recommendedKeywords);
 
-
-	//	4차 병합 수정
 	@Query(value ="SELECT r.* FROM Recipe r " +
 			"WHERE (r.title IN :recommendedKeywords OR r.tag IN :recommendedKeywords) " +
 			"AND (:rctype IS NULL OR r.rctype = :rctype) " +

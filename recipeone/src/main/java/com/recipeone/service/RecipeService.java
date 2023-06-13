@@ -21,7 +21,6 @@ public interface RecipeService {
 	public int registStep(List<RecipeStep> rsList);
 
 	public int registIngredient(List<RecipeIngredient> rmList) ;
-
 	public int checkRecommand(int recipeno, String memberEmail);
 
 	public int allRecipeCommentList(int page, int limit, int recipeno);
@@ -40,7 +39,6 @@ public interface RecipeService {
 	public List<RecipeStep> printOneRecipeStep(int recipeno) ;
 	
 	public List<RecipeIngredient> printOneRecipeIngredient(int recipeno) ;
-
 	public int removeOneImg(String picName);
 
 	public List<Recipe> recomadRecipe(String recipeCategory);
