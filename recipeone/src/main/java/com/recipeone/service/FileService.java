@@ -17,6 +17,15 @@ public class FileService {
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
         String savedFileName = uuid.toString() + extension;
         String fileuploadFullUrl = uploadPath + "/" + savedFileName;
+
+        File uploadDirectory = new File(uploadPath);
+        if (!uploadDirectory.exists()) {
+            // 경로에 폴더가 없으면 폴더 생성
+            if (!uploadDirectory.mkdirs()) {
+                throw new Exception("파일을 저장할 경로를 생성할 수 없습니다.");
+            }
+        }
+
         FileOutputStream fos = new FileOutputStream(fileuploadFullUrl);
         fos.write(fileData);
         fos.close();

@@ -67,7 +67,7 @@ public class RecipeServiceImpl implements RecipeService {
         List<Recipe> recipecont = recipeRepository.findRecipesByFilterSearched(recommendedKeywords,rctype,rcsituation,rcmeans,rcingredient);
         List<ListRecipeDto> listRecipeDtoList = new ArrayList<>();
         for (Recipe recipe : recipecont) {
-            ListRecipeDto listRecipeDto = new ListRecipeDto(recipe.getRecipeno(), recipe.getTitle(), recipe.getMainpicrename(),recipe.getTag(),recipe.getWriter(), recipe.getRecipestatus());
+            ListRecipeDto listRecipeDto = new ListRecipeDto(recipe.getRecipeno(), recipe.getTitle(), recipe.getMainpicrename(),recipe.getTag(),recipe.getWriter(), recipe.getRecipestatus(), recipe.getMainpicurl());
             listRecipeDtoList.add(listRecipeDto);
         }
         model.addAttribute("recipe", listRecipeDtoList);
@@ -78,8 +78,7 @@ public class RecipeServiceImpl implements RecipeService {
     public List<String> recommendKeywords(String keyword) throws RecipeIdExistException {
 
         List<String> titleList = recipeRepository.findtitlelist();
-//        List<String> taglist = recipeRepository.findtaglist();
-        List<String> taglist = new ArrayList<>(Arrays.asList("a", "b")); //레시피 등록할 때 태그 들어가면 삭제
+        List<String> taglist = recipeRepository.findtaglist();
         double similarityRatio = 0.5;
         log.info("titleList======" + titleList);
         log.info("taglist======" + taglist);

@@ -1,11 +1,15 @@
 package com.recipeone.service;
 
+//import com.recipeone.dto.LoginCountDTO;
 import com.recipeone.dto.MemberJoinDTO;
 import com.recipeone.dto.MemberMofifyDTO;
 import com.recipeone.entity.Member;
+import com.recipeone.entity.MemberLoginlog;
 import com.recipeone.entity.MemberRole;
 import com.recipeone.entity.Recipe;
+import com.recipeone.repository.MemberLogRepository;
 import com.recipeone.repository.MemberRepository;
+import com.recipeone.repository.RecipeRepository;
 import com.recipeone.security.dto.MemberSecurityDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -13,19 +17,14 @@ import org.modelmapper.ModelMapper;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -34,6 +33,8 @@ public class MemberServiceImpl implements MemberService {
     private final ModelMapper modelMapper;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RecipeRepository recipeRepository;
+    private final MemberLogRepository memberLogRepository;
 
     @Override
     public void join(MemberJoinDTO memberJoinDTO) throws MidExistException, UserNickNameExistException, UserEmailExistException, ConfirmedPasswordException { //문제없는 코드
@@ -59,7 +60,7 @@ public class MemberServiceImpl implements MemberService {
         log.info(member.getRoleSet());
     }
 
-    @Override //수정이 필요함 닉네임 수정 안됨 비밀번호는 될듯?
+    @Override
     public void socialmodify(MemberMofifyDTO memberMofifyDTO) throws MidExistException, UserNickNameExistException, UserEmailExistException, ConfirmedPasswordException { //문제없는 코드
         Optional<Member> result = memberRepository.memberset(memberMofifyDTO.getMid());
         if (result.isEmpty()) {
@@ -77,6 +78,9 @@ public class MemberServiceImpl implements MemberService {
         if (!oldusernickname.equals(usernickname) && memberRepository.findByUserNickName(usernickname).isEmpty()) { memberRepository.updateusernickname(usernickname, mid);}
         password = passwordEncoder.encode(password);
         memberRepository.updatePassword(password, mid);
+
+        //레시피 작성자 활동명 수정
+        recipeRepository.updaterecipeusernickname(usernickname,oldusernickname);
 
         MemberSecurityDTO memberSecurityDTO = (MemberSecurityDTO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         memberSecurityDTO.setUsernickname(usernickname);
@@ -97,6 +101,8 @@ public class MemberServiceImpl implements MemberService {
         String useraddr = memberMofifyDTO.getUseraddr();
         String userfullname = memberMofifyDTO.getUserfullname();
         String userphone = memberMofifyDTO.getUserphone();
+        String useryear = memberMofifyDTO.getUseryear();
+        String usergender = memberMofifyDTO.getUsergender();
         LocalDateTime now = LocalDateTime.now();
 
         if (!olduseremail.equals(useremail)&& memberRepository.findByUseremail(useremail).isPresent()) { throw new UserEmailExistException(); }
@@ -107,6 +113,14 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.updateuserfullname(userfullname, mid);
         memberRepository.updateuserphone(userphone, mid);
         memberRepository.updatemoddate(now, mid);
+        memberRepository.updateuseryear(useryear, mid);
+        memberRepository.updateusergender(usergender, mid);
+
+        //레시피 작성자 활동명 수정
+        recipeRepository.updaterecipeusernickname(usernickname,oldusernickname);
+        
+        //로그 기록 수정
+        memberLogRepository.updateMemberLoginLogData(useryear,usergender,mid);
 
         // memberSecurityDTO 업데이트
         MemberSecurityDTO memberSecurityDTO = (MemberSecurityDTO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -115,6 +129,8 @@ public class MemberServiceImpl implements MemberService {
         memberSecurityDTO.setUseraddr(useraddr);
         memberSecurityDTO.setUserfullname(userfullname);
         memberSecurityDTO.setUserphone(userphone);
+        memberSecurityDTO.setUseryear(useryear);
+        memberSecurityDTO.setUsergender(usergender);
         // Authentication 객체 업데이트
         Authentication newAuthentication = new UsernamePasswordAuthenticationToken(memberSecurityDTO, memberSecurityDTO.getPassword(), memberSecurityDTO.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuthentication);

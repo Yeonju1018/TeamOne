@@ -31,15 +31,15 @@ public class Recipe {
 	private int rccount; // 레시피 조회수
 	private String recipestatus; // 레시피 삭제 여부
 	private String writer; // 사용자 닉네임
+	private String mainpicurl;
 
 	public Recipe() {
 	}
 
 	public Recipe(int recipeno, String title, String cooktime, String nop, String mainpic,
 			String mainpicrename, String tag, String rctype, String rcsituation, String rcingredient,
-			String rcmeans, Date insertdate, Date updatedate, int rccount, String recipestatus, String writer) {
+			String rcmeans, Date insertdate, Date updatedate, int rccount, String recipestatus, String writer, String mainpicurl) {
 		this.recipeno = recipeno;
-		//this.writer = writer;
 		this.title = title; 
 		this.cooktime =cooktime; 
 		this.nop = nop;
@@ -55,5 +55,6 @@ public class Recipe {
 		this.rccount = rccount;
 		this.recipestatus = recipestatus;
 		this.writer = writer;
+		this.mainpicurl = mainpicurl;
 	 }
 }
