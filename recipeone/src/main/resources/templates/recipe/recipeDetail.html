@@ -32,8 +32,6 @@
               <li th:text="'순서'+${rs.recipeorder}+': '+${rs.recipedescription}"></li>
               <div class="step-image" >
                   <th:block th:each="recipeImg : ${rs.recipepicurl}" >
-                      <!--            <img th:src="@{'/images/item/' + ${recipeImg.imgUrl}}" th:alt="Step Image">-->
-                      <!--<img th:src="@{'file:///c:/recipe/item/recipeImg/' + ${recipeImg}}" >-->
                       <img th:src="${recipeImg}">
                   </th:block>
               </div>
@@ -47,8 +45,6 @@
 
     <th:block th:each="recipe : ${recipe}">
     <div th:with="user=${#authentication.principal}">
-<!--        <div th:text="${user}"></div>
-        <div th:text="${recipe}"></div>-->
         <article id="recipe-button" th:if="${#request.isUserInRole('ROLE_USER') and #authentication.principal.usernickname.equals(recipe.writer)}">
             <div class="col-md-12 row ">
                 <div class="col-md-6">
@@ -64,7 +60,6 @@
                 </div>
             </div>
         </article><!-- 버튼영역 종료 -->
-
     </div>
     </th:block>
   </div>

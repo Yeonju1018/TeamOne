@@ -38,6 +38,7 @@ public class RecipeRepositoryTest {
 			recipe.setRecipeno(i);
 //			recipe.setWriter("User " + random.nextInt(10));
 			recipe.setWriter("이춘장");
+
 			recipe.setTitle("Recipe " + i);
 			recipe.setCooktime(random.nextInt(60) + " minutes");
 			recipe.setNop(random.nextInt(4) + 1 + " servings");

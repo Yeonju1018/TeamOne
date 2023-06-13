@@ -25,7 +25,6 @@ public class Recipe {
 	private String rcsituation; // 카테고리 상황별
 	private String rcingredient; // 카테고리 재료별
 	private String rcmeans; // 카테고리 방법별
-	//private String rcTheme; // 카테고리 테마별
 	private Date insertdate; // 레시피 최초 입력 시간
 	private Date updatedate; // 레시피 업데이트 시간
 	private int rccount; // 레시피 조회수

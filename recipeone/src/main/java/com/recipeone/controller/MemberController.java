@@ -5,27 +5,23 @@ import com.recipeone.dto.MemberJoinDTO;
 import com.recipeone.dto.MemberMofifyDTO;
 import com.recipeone.entity.Member;
 import com.recipeone.entity.MemberLoginlog;
+import com.recipeone.entity.Memberpagelog;
 import com.recipeone.entity.Recipe;
 import com.recipeone.repository.MemberLogRepository;
-import com.recipeone.entity.Recipe;
+import com.recipeone.repository.MemberPageRepository;
 import com.recipeone.repository.MemberRepository;
 import com.recipeone.repository.RecipeRepository;
-import com.recipeone.security.dto.MemberSecurityDTO;
 import com.recipeone.service.MemberService;
 import com.recipeone.service.MemberServiceImpl;
 import com.recipeone.service.RecipeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,17 +34,12 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService memberService;
-
     private final MemberRepository memberRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final RecipeRepository recipeRepository;
-
     private final RecipeService recipeService;
-
     private final MemberLogRepository memberLogRepository;
-
+    private final MemberPageRepository memberPageRepository;
 
     @GetMapping("/login") //그냥 /login으로 요청왔을 때
     public void loginGET(String error, String logout) {
@@ -57,12 +48,6 @@ public class MemberController {
         if (logout != null) {
             log.info("user logout.........");
         }
-    }
-
-    @PostMapping("/login")
-    public String loginPost() {
-        log.info("login 성공...........");
-        return "redirect:/main2";
     }
 
     @GetMapping("/socialmodify")
@@ -221,7 +206,8 @@ public class MemberController {
         model.addAttribute("members", members);
         List<MemberLoginlog> memberLoginLogs = memberLogRepository.findAllMemberLoginLogs();
         model.addAttribute("memberLoginLogs", memberLoginLogs);
-
+        List<Memberpagelog> memberpagelogs = memberPageRepository.findAll();
+        model.addAttribute("memberpagelogs",memberpagelogs);
 
         return "member/admin";
     }

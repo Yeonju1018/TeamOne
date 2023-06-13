@@ -1,84 +1,43 @@
 package com.recipeone.controller;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-
-import java.util.Map;
-import java.util.Optional;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-
 import com.recipeone.dto.ListRecipeDto;
-
 import com.recipeone.entity.*;
-
-
-import com.recipeone.entity.Recipe;
-import com.recipeone.entity.RecipeIngredient;
-import com.recipeone.entity.RecipeStep;
 import com.recipeone.repository.MemberLogRepository;
 import com.recipeone.repository.MemberRepository;
 import com.recipeone.repository.RecipeRepository;
 import com.recipeone.security.dto.MemberSecurityDTO;
 import com.recipeone.service.FileService;
-import com.recipeone.service.MemberService;
 import com.recipeone.service.RecipeService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-
-import org.apache.commons.io.IOUtils;
-
-import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.util.UriComponentsBuilder;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/recipe")
 @Log4j2
 @RequiredArgsConstructor
 public class RecipeController {
-    private final RecipeService recipeService;
-    private final RecipeRepository recipeRepository;
-    private final MemberRepository memberRepository;
-    private final MemberLogRepository memberLogRepository;
+	private final RecipeService recipeService;
+	private final RecipeRepository recipeRepository;
+	private final MemberRepository memberRepository;
+	private final MemberLogRepository memberLogRepository;
 
 	@Autowired
 	private FileService fileService;
@@ -91,101 +50,101 @@ public class RecipeController {
 		return "recipe/recipeForm";
 	}
 
-    @PostMapping("/recipeForm")
-    public String saveRecipe(@ModelAttribute Recipe recipe,
-                             @ModelAttribute RecipeStep recipeStep,
-                             @ModelAttribute RecipeIngredient rIngredient,
-                             @RequestParam(value = "mainPicture") MultipartFile mainPicture,
-                             @RequestParam(value = "recipePicture", required = false) List<MultipartFile> recipePicture,
-                             Model model, HttpSession session, HttpServletRequest request) {
+	@PostMapping("/recipeForm")
+	public String saveRecipe(@ModelAttribute Recipe recipe,
+							 @ModelAttribute RecipeStep recipeStep,
+							 @ModelAttribute RecipeIngredient rIngredient,
+							 @RequestParam(value = "mainPicture") MultipartFile mainPicture,
+							 @RequestParam(value = "recipePicture", required = false) List<MultipartFile> recipePicture,
+							 Model model, HttpSession session, HttpServletRequest request) {
 
-        try {
-            // 레시피 전달
-            // 대표사진 저장코드
-            String mainPic = mainPicture.getOriginalFilename();
+		try {
+			// 레시피 전달
+			// 대표사진 저장코드
+			String mainPic = mainPicture.getOriginalFilename();
 			String mainPicRename = "";
 			String mainpicurl = "";
 
-            if (!mainPic.isEmpty()) {
-                mainPicRename = fileService.uploadFile(recipeImgLocation, mainPic, mainPicture.getBytes());
+			if (!mainPic.isEmpty()) {
+				mainPicRename = fileService.uploadFile(recipeImgLocation, mainPic, mainPicture.getBytes());
 				Path folderPath = Paths.get(recipeImgLocation);
 				mainpicurl = "/images/item/" + mainPicRename;
-                try {
-                    // 파일 저장
-                    mainPicture.transferTo(new File(folderPath + mainPicRename));
-                    recipe.setMainpic(mainPic);
-                    recipe.setMainpicrename(mainPicRename);
+				try {
+					// 파일 저장
+					mainPicture.transferTo(new File(folderPath + mainPicRename));
+					recipe.setMainpic(mainPic);
+					recipe.setMainpicrename(mainPicRename);
 					recipe.setMainpicurl(mainpicurl);
-                    model.addAttribute("mainPic", mainPicRename);
-                } catch (Exception e) {
-                    log.error("레시피 메인사진 중 오류 발생", e);
-                    return "error";
-                }
-            }
-            recipeService.registRecipe(recipe);
+					model.addAttribute("mainPic", mainPicRename);
+				} catch (Exception e) {
+					log.error("레시피 메인사진 중 오류 발생", e);
+					return "error";
+				}
+			}
+			recipeService.registRecipe(recipe);
 
-            // 레시피 재료 리스트 만들어서 전달하기
-            ArrayList<RecipeIngredient> rmList = new ArrayList<RecipeIngredient>();
-            String amount[] = rIngredient.getAmount().split(",");
-            String ingredient[] = rIngredient.getIngredient().split(",");
-            int count = 1;
-            for (int i = 0; i < ingredient.length; i++) {
-                // 재료나 수량이 비어있지 않을때만 List에 저장
-                if (!amount[i].equals("") && !ingredient[i].equals("")) {
-                    RecipeIngredient rIngredientOne = new RecipeIngredient();
-                    rIngredientOne.setAmount(amount[i]);
-                    rIngredientOne.setIngredient(ingredient[i]);
-                    rIngredientOne.setIngredientorder(count++);
-                    rmList.add(rIngredientOne);
-                }
-            }
-            log.info(">>>재료List는======" + rmList);
-            recipeService.registIngredient(rmList);
-            model.addAttribute("recipeIngredient", rmList);
-            // 레시피 순서 리스트 만들어서 전달하기
-            ArrayList<RecipeStep> rsList = new ArrayList<RecipeStep>();
-            recipeStep.getRecipedescription();
-            String arrDescription[] = recipeStep.getRecipedescription().split(",ab22bb,");
-            // 더미 value까지 배열을 나누는것으로 인식해서 사용자가 ,를 입력했을때 정상적으로 table에 저장되게 한다
-            arrDescription[arrDescription.length - 1] = arrDescription[arrDescription.length - 1].replace(",ab22bb",
-                    "");
-            // 배열의 마지막은 ,가 안들어가기때문에 더미vlaue 배열값으로 인식한다, ,가 없는 더미value를 삭제 해주는 코드
-            // 레시피 순서 사진 저장코드
-            int countStep = 1;
-            for (int i = 0; i < arrDescription.length; i++) {
-                String recipePic = recipePicture.get(i).getOriginalFilename();
-                String recipePicRename = "";
+			// 레시피 재료 리스트 만들어서 전달하기
+			ArrayList<RecipeIngredient> rmList = new ArrayList<RecipeIngredient>();
+			String amount[] = rIngredient.getAmount().split(",");
+			String ingredient[] = rIngredient.getIngredient().split(",");
+			int count = 1;
+			for (int i = 0; i < ingredient.length; i++) {
+				// 재료나 수량이 비어있지 않을때만 List에 저장
+				if (!amount[i].equals("") && !ingredient[i].equals("")) {
+					RecipeIngredient rIngredientOne = new RecipeIngredient();
+					rIngredientOne.setAmount(amount[i]);
+					rIngredientOne.setIngredient(ingredient[i]);
+					rIngredientOne.setIngredientorder(count++);
+					rmList.add(rIngredientOne);
+				}
+			}
+			log.info(">>>재료List는======" + rmList);
+			recipeService.registIngredient(rmList);
+			model.addAttribute("recipeIngredient", rmList);
+			// 레시피 순서 리스트 만들어서 전달하기
+			ArrayList<RecipeStep> rsList = new ArrayList<RecipeStep>();
+			recipeStep.getRecipedescription();
+			String arrDescription[] = recipeStep.getRecipedescription().split(",ab22bb,");
+			// 더미 value까지 배열을 나누는것으로 인식해서 사용자가 ,를 입력했을때 정상적으로 table에 저장되게 한다
+			arrDescription[arrDescription.length - 1] = arrDescription[arrDescription.length - 1].replace(",ab22bb",
+					"");
+			// 배열의 마지막은 ,가 안들어가기때문에 더미vlaue 배열값으로 인식한다, ,가 없는 더미value를 삭제 해주는 코드
+			// 레시피 순서 사진 저장코드
+			int countStep = 1;
+			for (int i = 0; i < arrDescription.length; i++) {
+				String recipePic = recipePicture.get(i).getOriginalFilename();
+				String recipePicRename = "";
 				String recipepicurl = "";
-                if (!recipePic.isEmpty()) {
+				if (!recipePic.isEmpty()) {
 					recipePicRename = fileService.uploadFile(recipeImgLocation, recipePic, recipePicture.get(i).getBytes());
 					Path folderPath = Paths.get(recipeImgLocation);
 					recipepicurl = "/images/item/" + recipePicRename;
 
-                    try {
-                        // 파일 저장
-                        recipePicture.get(i).transferTo(new File(folderPath + recipePicRename));
-                    } catch (Exception e) {
-                        log.error("레시피 순서 사진 중 오류 발생", e);
-                        return "error";
-                    }
-                }
-                // 여기서부터 레시피 step 테이블에 저장할 값 List화 시키는 코드
-                RecipeStep rStepOne = new RecipeStep();
-                rStepOne.setRecipedescription(arrDescription[i]);
-                rStepOne.setRecipeorder(countStep++);
-                rStepOne.setRecipepic(recipePic);
-                rStepOne.setRecipepicrename(recipePicRename);
+					try {
+						// 파일 저장
+						recipePicture.get(i).transferTo(new File(folderPath + recipePicRename));
+					} catch (Exception e) {
+						log.error("레시피 순서 사진 중 오류 발생", e);
+						return "error";
+					}
+				}
+				// 여기서부터 레시피 step 테이블에 저장할 값 List화 시키는 코드
+				RecipeStep rStepOne = new RecipeStep();
+				rStepOne.setRecipedescription(arrDescription[i]);
+				rStepOne.setRecipeorder(countStep++);
+				rStepOne.setRecipepic(recipePic);
+				rStepOne.setRecipepicrename(recipePicRename);
 				rStepOne.setRecipepicurl(recipepicurl);
-                rsList.add(rStepOne);
-                log.info(">>>rStepOne은======" + rStepOne);
-            }
-            log.info(">>>순서List는======" + rsList);
-            recipeService.registStep(rsList); // 레시피 순서저장 코드 종료
-            model.addAttribute("recipeStep", rsList);
-        } catch (Exception e) {
-            log.error("레시피 저장 중 오류 발생", e);
-            return "error";
-        }
+				rsList.add(rStepOne);
+				log.info(">>>rStepOne은======" + rStepOne);
+			}
+			log.info(">>>순서List는======" + rsList);
+			recipeService.registStep(rsList); // 레시피 순서저장 코드 종료
+			model.addAttribute("recipeStep", rsList);
+		} catch (Exception e) {
+			log.error("레시피 저장 중 오류 발생", e);
+			return "error";
+		}
 		//        4차병합 게시글 수에 따라 유저 레벨 상승
 		int count  = recipeRepository.countByUserNickname(recipe.getWriter());
 		int[] levelRanges = {2, 6, 16, 51};
@@ -208,11 +167,9 @@ public class RecipeController {
 		//memberlog 업데이트
 		memberLogRepository.updateMemberLoginLoglev(userlev,recipe.getWriter());
 
-
 		return "redirect:/";
 	}
 
-	// 3차병합때 수정한 부분
 	@GetMapping(value = "/recipeList")
 	public String recipeList(HttpSession session, Model model,
 							 @RequestParam(value = "currentPage", defaultValue = "1") int currentPage) {
@@ -274,8 +231,6 @@ public class RecipeController {
 		return "recipe/recipeList";
 	}
 
-// 3차병합때 수정한 부분
-
 	@PostMapping("/recipeList")
 	public String recipelistPOST(@RequestParam(value = "keyword", required = false) String keyword, RedirectAttributes redirectAttributes, HttpSession session) {
 		try {
@@ -301,9 +256,7 @@ public class RecipeController {
 		return "redirect:/recipe/recipeList";
 	}
 
-
 // 3차병합때 수정한 부분
-
 	@PostMapping("/sendData")
 	public String handleFormData(@RequestParam(value = "rctype", required = false) String rctype,
 								 @RequestParam(value = "rcsituation", required = false) String rcsituation,
@@ -344,7 +297,6 @@ public class RecipeController {
 		return "redirect:/recipe/recipeList"; // 원래 페이지로 리다이렉트
 	}
 
-
 	//추천 키워드 부분
 	@RequestMapping(value = "/recommendKeywords", method = RequestMethod.POST)
 	@ResponseBody
@@ -356,7 +308,6 @@ public class RecipeController {
 		}
 		return recommendedKeywords;
 	}
-
 
 	@GetMapping(value = "/recipeDetail/{recipeno}")
 	public String viewRecipeStep(@PathVariable(value = "recipeno") int recipeno, Model model, @RequestParam(value = "currentPage",required = false, defaultValue = "1") int currentPage) {
@@ -378,7 +329,6 @@ public class RecipeController {
 		}
 		return "recipe/recipeDetail";
 	}
-
 
 	@GetMapping(value = "/recipeModify/{recipeno}")
 	public String recipeModify(@PathVariable("recipeno") int recipeno, HttpSession session, Model model) {

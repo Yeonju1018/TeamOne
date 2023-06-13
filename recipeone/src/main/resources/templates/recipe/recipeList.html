@@ -19,8 +19,8 @@
 
       form.appendChild(input);
       document.body.appendChild(form);
-
       form.submit();
+
     }
 
     <!--카테고리 열고 닫기-->
@@ -172,9 +172,6 @@
             <div class="m_list_tit">
                 총 <b th:text="${recipeCount}" >0</b>개의 맛있는 레시피가 있습니다.
                 <ul class="nav nav-tabs2 pull-right" style="position:relative;">
-<!--                    <li><a th:href="@{/recipe/recipeList?sort=latest">조회순</a></li>
-                    <li><a th:href="@{/recipe/recipeList?sort=views">최신순</a></li>
-                    <li><a href="#">추천순</a></li>-->
                     <li><a href="#">조회순</a></li>
                     <li><a href="#">최신순</a></li>
                     <li><a href="#">추천순</a></li>
@@ -187,13 +184,8 @@
                     <li class="common_sp_list_li" >
                         <div class="common_sp_thumb">
                             <a th:href="@{'/recipe/recipeDetail/' + ${recipe.recipeno}}" class="common_sp_link">
-                                <!-- <a th:href="@{'/recipe/recipeDetail/' + ${recipe.recipeno}}" class="common_sp_link"></a> -->
-                                <span class="common_vod_label">
-                            <!--<img src="https://recipe1.ezmember.co.kr/img/icon_vod.png"> 동영상 링크가 있을때-->
-                        </span>
+                                <span class="common_vod_label"></span>
                                 <img th:src="${recipe.mainpicurl}">
-
-                                <!-- <img th:src="${recipe.mainPicRename}"> -->
                             </a>
                         </div>
 
@@ -201,10 +193,7 @@
                             <div class="common_sp_caption_tit line2" th:text="${recipe.title}">제목</div>
                             <div class="common_sp_caption_tit line2" th:text="${recipe.tag}">태그</div>
                             <div class="common_sp_caption_rv_name" style="display: inline-block; vertical-align: bottom;">
-                                <!--<a href="/profile/recipe.html?uid=plc0410">-->
-                                    <!--<img src="../img/food.jpg">-->
-                                    <div class="common_sp_caption_tit line2" th:text="${recipe.writer}">작성자</div>
-                                <!--</a>-->
+                                <div class="common_sp_caption_tit line2" th:text="${recipe.writer}">작성자</div>
                             </div>
                         </div>
                     </li>
