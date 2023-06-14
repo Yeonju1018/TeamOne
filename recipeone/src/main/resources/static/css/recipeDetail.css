@@ -1,0 +1,77 @@
+#main_thumbs {
+  width: 400px;
+  height: 250px;
+}
+
+#recipeInfo {
+    padding-left: 0;
+}
+
+#recipeInfo>li {
+    list-style: none;
+    display: inline-block;
+    padding: auto;
+    margin: 0px 20px 0px 5px;
+}
+
+#recipeStep {
+    padding: 0px 20px 0px 20px;
+    display: inline-block;
+    margin-right: 30px;
+}
+
+#recipeStepList {
+    display: flex;
+    align-items: top;
+}
+
+#recipeStep>li {
+    list-style: none;
+}
+
+#recipeorder {
+    flex: 0 0 100px;
+    margin-right: 30px;
+    text-align: center;
+}
+
+#recipedescription {
+    flex: 1;
+    margin-right: 30px;
+    padding-top: 20px;
+    width: 500px;
+    height: 300px;
+        /* display: flex; 추가 */
+        flex-direction: column; /* 추가 */
+        justify-content: center; /* 추가 */
+        align-items: top; /* 추가 */
+}
+
+
+.step-image {
+    display: inline-block;
+        flex: 0 0 200px;
+        padding-top: 20px;
+        margin: 0;
+}
+
+#recipeImg {
+    width: 500px;
+    height: 300px;
+
+}
+
+#recipeIngredient {
+    padding: 0px;
+}
+
+#recipeIngredient>li {
+    list-style: none;
+}
+
+#recipeIngredient>li>p {
+    display: inline;
+    padding-left: 0px;
+    margin: 0px 20px 0px 0px;
+}
+
