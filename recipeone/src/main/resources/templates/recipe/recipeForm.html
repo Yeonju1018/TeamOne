@@ -17,12 +17,11 @@
 	};
 
 	//// 이미지파일 체크 시작 ////
-		var imgFile = document.querySelectorAll('.isFile');
-		var fileForm = /(.*?)\.(jpg|jpeg|png|gif|bmp)$/i;
-		var fileSize;
+
 		function checkMainPic() {
+			var imgFile = document.querySelectorAll('.isFile');
 			if (imgFile[0].value == "") {
-				alert("대표사진은 필수입니다!");
+				alert("사진은 필수입니다!");
 			}
 		};
 
@@ -78,9 +77,7 @@
 	}
 
 	function imgView(obj) {
-
 			var imgid = obj.previousElementSibling;
-
 			imgid.src = URL.createObjectURL(event.target.files[0]);
 			imgid.onload = function() {
 				URL.revokeObjectURL(imgid.src) // free memory
@@ -89,12 +86,15 @@
 		};
 
 	function imgCheck() {
+		var imgFile = document.querySelectorAll('.isFile');
+		var fileForm = /(.*?)\.(jpg|jpeg|png|gif|bmp)$/i;
+		var fileSize;
 			for (var i = 0; i < imgFile.length; i++) {
 				if (imgFile[i].value != "") {
-
 					if (!imgFile[i].value.match(fileForm)) {
 						alert("이미지 파일만 업로드 가능");
 						imgFile[i].value = "";
+						return false;
 					}
 				}
 			}
@@ -114,13 +114,62 @@
 		imgfiles.removeAttribute('src');
 		}
 	//재료 유효성 검사//
-		var check = /,/
 		function materialCheck(obj){
+		var check = /,/
 				if(check.test(obj.value)){
-					alert(",는 사용할수 없습니다.");
+					alert(",는 사용할수 없습니다. + 버튼으로 추가해주세요!");
 					obj.value="";
 			}
 		}
+
+	<!-- 경고창 -->
+	$(function() {
+		$("button[type=submit]").click(function() {
+			var mainPicResult = $.trim($("input[name=mainPicture]").val());
+			var titleResult =  $.trim($("input[name=title]").val());
+			var recipePicResult = $.trim($("input[name=recipePicture]").val());
+			var recipedescriptionResult = $.trim($("textarea[name=recipedescription]").val());
+			var ingredientResult = $.trim($("input[name=ingredient]").val());
+			var amountResult = $.trim($("input[name=amount]").val());
+			var recipeTagResult = $.trim($("input[name=tag]").val());
+
+			if (!mainPicResult) {
+				alert("메인 사진은 필수입니다!");
+				return false;
+			}
+
+			if (!titleResult) {
+				alert("제목은 필수입니다!");
+				return false;
+			}
+
+			if (!recipedescriptionResult) {
+				alert("조리과정 설명은 필수입니다!");
+				return false;
+			}
+
+			if (!recipePicResult) {
+				alert("요리 사진은 필수입니다!");
+				return false;
+			}
+
+			if (!ingredientResult) {
+				alert("재료명 입력은 필수입니다!");
+				return false;
+			}
+
+			if (!amountResult) {
+				alert("재료수량 입력은 필수입니다!");
+				return false;
+			}
+
+			if(!recipeTagResult) {
+				alert("태그 입력은 필수입니다!");
+				return false;
+			}
+		});
+	});
+
     </script>
 </th:block>
 
@@ -147,12 +196,11 @@
       	<h3 class="subheading">레시피 제목&nbsp;&nbsp;&nbsp;</h3>
 		<div class="input-group">
 			<input type="text" name="title" placeholder="예) 미역국 끓이기" style="width:610px;" ><br />
-		</div>
+		</div><br />
 		
 		<h3 class="subheading">요리순서</h3>
 		<div class="input-group">
 			<div class="recipeDetail container-md row" id="article2-area"  th:object="${recipeStep}">
-
 				<!-- 여기서부터 레시피 설명-->
 				<div id="REdetail"  class="REdetailC row check">
 					<!-- 레시피 설명역역 -->
@@ -191,8 +239,7 @@
 					<text x="50%" y="50%" style="font-size: 25px; font-weight: bold;" dominant-baseline="middle" text-anchor="middle">-</text>
 				</svg>
 			</div>
-		</div> <!-- 요리순서 END -->
-
+		</div> <!-- 요리순서 END --><br />
 
 		<h3 class="subheading">카테고리</h3>
 		<div class="input-group">
@@ -327,7 +374,7 @@
 					<text x="50%" y="50%" style="font-size: 25px; font-weight: bold;" dominant-baseline="middle" text-anchor="middle">-</text>
 				</svg>
 			</div>
-		</div>
+		</div><br />
 
 
 		<h3 class="subheading" >태그&nbsp;&nbsp;&nbsp;</h3>

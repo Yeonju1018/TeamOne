@@ -39,10 +39,6 @@ body {min-width: 1240px;}
 .rcp_cate_btn a span img {margin-top:-1px;}
 .thumbs_hb {height:120px;}
 
-.rcp_m_banner {width:1240px; margin:7px 0 14px 0; float:left;}
-.rcp_m_banner a {margin-right:5px; float:left;}
-.rcp_m_banner a img {width:410px; -webkit-box-shadow:0 2px 2px rgba(0, 0, 0, 0.2); box-shadow:0 2px 2px rgba(0, 0, 0, 0.2);}
-.rcp_m_banner a:last-child {margin-right:0;}
 .rcp_m_list {margin-top:38px;}
 .rcp_m_list .row {margin:0 -7px 0 -6px;}
 .rcp_m_list .row .col-xs-3 {padding:0 7px;}

@@ -227,6 +227,7 @@ public class RecipeController {
 		model.addAttribute("blockStart", blockStart);
 		model.addAttribute("blockEnd", blockEnd);
 
+
 		return "recipe/recipeList";
 	}
 
@@ -239,6 +240,8 @@ public class RecipeController {
 			session.setAttribute("rcsituation", null);
 			session.setAttribute("rcingredient", null);
 			session.setAttribute("rcmeans", null);
+
+
 
 			List<Recipe> recipeList = recipeRepository.findRecipesByFilterSearched(recommendedKeywords, null, null, null, null); // DB에서 레시피 목록 조회
 
@@ -291,7 +294,10 @@ public class RecipeController {
 			listRecipeDtoList.add(listRecipeDto);
 		}
 		redirectAttributes.addFlashAttribute("recipe", listRecipeDtoList);
-
+		redirectAttributes.addFlashAttribute("rctype", rctype);
+		redirectAttributes.addFlashAttribute("rcsituation", rcsituation);
+		redirectAttributes.addFlashAttribute("rcingredient", rcingredient);
+		redirectAttributes.addFlashAttribute("rcmeans", rcmeans);
 		return "redirect:/recipe/recipeList"; // 원래 페이지로 리다이렉트
 	}
 

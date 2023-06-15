@@ -70,6 +70,9 @@ public class RecipemainTest {
 		recipe.setRcmeans(categoryMethods[random.nextInt(categoryMethods.length)]);
 		recipeRepository.save(recipe);
 
+
+
+
 		recipe = new Recipe();
 		recipe.setRecipeno(3);
 		recipe.setWriter("조형찬");

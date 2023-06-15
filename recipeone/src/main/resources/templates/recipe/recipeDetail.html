@@ -20,19 +20,25 @@
     </ul>
 
     <h3>재료</h3>
-    <ul>
+    <ul id="recipeIngredient">
       <th:block th:each="rm : ${rmList}">
-        <li th:text="'재료:' + ${rm.ingredient} + ', 수량:' + ${rm.amount}"></li>
+        <li>
+            <p th:text="'재료 : ' + ${rm.ingredient}" >재료</p>
+            <p th:text="'수량 : ' + ${rm.amount}">수량</p>
+        </li>
       </th:block>
     </ul>
 
     <h3>요리 순서</h3>
-      <ul>
+      <ul id="recipeStep">
           <th:block th:each="rs : ${rsList}">
-              <li th:text="'순서'+${rs.recipeorder}+': '+${rs.recipedescription}"></li>
+              <li id="recipeStepList">
+                  <p id="recipeorder" th:text="'순서 '+${rs.recipeorder}">순서번호</p>
+                  <p id="recipedescription" th:text="${rs.recipedescription}">순서내용</p>
+              </li>
               <div class="step-image" >
                   <th:block th:each="recipeImg : ${rs.recipepicurl}" >
-                      <img th:src="${recipeImg}">
+                      <img id="recipeImg" th:src="${recipeImg}">
                   </th:block>
               </div>
           </th:block>
@@ -45,13 +51,13 @@
 
     <th:block th:each="recipe : ${recipe}">
     <div th:with="user=${#authentication.principal}">
-        <article id="recipe-button" th:if="${#request.isUserInRole('ROLE_USER') and #authentication.principal.usernickname.equals(recipe.writer)}">
+        <article id="recipe-button" >
             <div class="col-md-12 row ">
                 <div class="col-md-6">
-                    <a th:href="@{'/recipe/recipeModify/' + ${recipe.recipeno}}">
+                    <a th:href="@{'/recipe/recipeModify/' + ${recipe.recipeno}}" th:if="${#request.isUserInRole('ROLE_USER') and #authentication.principal.usernickname.equals(recipe.writer)}">
                         <button class="button btn btn-outline-primary" type="submit" th:text="수정">modify</button>
                     </a>
-                    <a th:href="@{'/recipe/recipeDelete/' + ${recipe.recipeno}}">
+                    <a th:href="@{'/recipe/recipeDelete/' + ${recipe.recipeno}}" th:if="${#request.isUserInRole('ROLE_USER') and #authentication.principal.usernickname.equals(recipe.writer)}">
                         <button class="button btn btn-outline-primary" type="submit" th:text="삭제">Delete</button>
                     </a>
                     <a th:href="@{'/recipe/recipeList?currentPage=' + ${currentPage}}">
