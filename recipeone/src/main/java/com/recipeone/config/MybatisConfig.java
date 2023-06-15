@@ -20,12 +20,10 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @Primary
 public class MybatisConfig {
-
     @Bean
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
         SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         sessionFactory.setDataSource(dataSource);
-
         Resource[] res = new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mapper/recipe-mapper.xml");
 
         sessionFactory.setMapperLocations(res);

@@ -14,10 +14,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MvcConfiguration implements WebMvcConfigurer {
 	@Autowired
 	private MemberPageRepository memberPageRepository;
-
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-
 		registry.addInterceptor(new SessionInterceptor(memberPageRepository))
 				.addPathPatterns("/**")
 				.excludePathPatterns("/**/*.js")
@@ -27,10 +25,8 @@ public class MvcConfiguration implements WebMvcConfigurer {
 				.excludePathPatterns("/**/error")
 				.excludePathPatterns("/**/null");
 	}
-
 	@Value("${uploadPath}")
 	String uploadPath;
-
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		// TODO Auto-generated method stub

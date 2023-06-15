@@ -21,8 +21,6 @@ public class RecipeStoreImpl implements RecipeStore {
     @Override
     public int insertRecipe(Recipe recipe, SqlSessionTemplate session) {
         int result = session.insert("com.recipeone.repository.RecipeStore.insertRecipe", recipe);
-        /*result += session.insert("RecipeMapper.insertPoint",recipe.getMemberEmail());
-        result+= session.update("RecipeMapper.updatePiont",recipe.getMemberEmail());*/
         return result;
     }
 
