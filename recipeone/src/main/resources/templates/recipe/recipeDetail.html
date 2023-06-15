@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<div layout:fragment="content">
+  <div class="view" >
+  <input type="hidden" name="recipeno" th:value="${recipe.recipeno}">
+    <img id="main_thumbs"  th:src="${recipe.mainpicurl}" th:alt="${recipe.title}">
+    <h3 th:text="${recipe.title}">Recipe Title</h3>
+
+    <h3>요리 정보</h3>
+    <ul id="recipeInfo">
+      <th:block th:each="nop : ${recipe.nop}">
+        <li th:text="${nop}+인분"></li>
+      </th:block>
+      <th:block th:each="cooktime : ${recipe.cooktime}">
+        <li th:text="${cooktime}+분"></li>
+      </th:block>
+    </ul>
+
+    <h3>재료</h3>
+    <ul id="recipeIngredient">
+      <th:block th:each="rm : ${rmList}">
+        <li>
+            <p th:text="'재료 : ' + ${rm.ingredient}" >재료</p>
+            <p th:text="'수량 : ' + ${rm.amount}">수량</p>
+        </li>
+      </th:block>
+    </ul>
+
+    <h3>요리 순서</h3>
+      <ul id="recipeStep">
+          <th:block th:each="rs : ${rsList}">
+              <li id="recipeStepList">
+                  <p id="recipeorder" th:text="'순서 '+${rs.recipeorder}">순서번호</p>
+                  <p id="recipedescription" th:text="${rs.recipedescription}">순서내용</p>
+              </li>
+              <div class="step-image" >
+                  <th:block th:each="recipeImg : ${rs.recipepicurl}" >
+                      <img id="recipeImg" th:src="${recipeImg}">
+                  </th:block>
+              </div>
+          </th:block>
+      </ul>
+
+    <h3>태그</h3>
+    <th:block th:each="recipe : ${recipe}">
+      <p th:text="${recipe.tag}"></p>
+    </th:block>
+
+    <th:block th:each="recipe : ${recipe}">
+    <div th:with="user=${#authentication.principal}">
+        <article id="recipe-button" >
+            <div class="col-md-12 row ">
+                <div class="col-md-6">
+                    <a th:href="@{'/recipe/recipeModify/' + ${recipe.recipeno}}" th:if="${#request.isUserInRole('ROLE_USER') and #authentication.principal.usernickname.equals(recipe.writer)}">
+                        <button class="button btn btn-outline-primary" type="submit" th:text="수정">modify</button>
+                    </a>
+                    <a th:href="@{'/recipe/recipeDelete/' + ${recipe.recipeno}}" th:if="${#request.isUserInRole('ROLE_USER') and #authentication.principal.usernickname.equals(recipe.writer)}">
+                        <button class="button btn btn-outline-primary" type="submit" th:text="삭제">Delete</button>
+                    </a>
+                    <a th:href="@{'/recipe/recipeList?currentPage=' + ${currentPage}}">
+                        <button class="button btn btn-outline-primary" type="submit" th:text="목록으로">List</button>
+                    </a>
+                </div>
+            </div>
+        </article><!-- 버튼영역 종료 -->
+    </div>
+    </th:block>
+  </div>
+</div>
+
+</html>
+
